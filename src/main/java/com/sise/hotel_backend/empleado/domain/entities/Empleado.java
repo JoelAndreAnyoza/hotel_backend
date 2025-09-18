@@ -1,6 +1,7 @@
-package com.sise.hotel_backend.cliente.domain.entities;
+package com.sise.hotel_backend.empleado.domain.entities;
 
 import java.time.LocalDateTime;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,16 +10,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
-    
+
 @Data
 @Entity
-@Table(name = "cliente")
-public class Cliente {
+@Table(name = "empleado")
+public class Empleado {
     
     @Id
-    @Column(name = "id_cliente")
+    @Column(name = "id_empleado")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCliente;
+    private Integer idEmpleado;
 
     @Column(name = "nombres")
     private String nombres;
@@ -29,24 +30,12 @@ public class Cliente {
     @Column(name = "apellido_materno")
     private String apellidoMaterno;
 
-    @Column(name = "tipo_documento")
-    private String tipoDocumento;
-
-    @Column(name = "nro_documento")
-    private String numeroDocumento;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "telefono")
-    private String telefono;
-
-    @Column(name = "direccion")
-    private String direccion;
+    @Column(name = "cargo")
+    private String cargo;
 
     @Column(name = "estado_auditoria", insertable = false, updatable = false)
     private String estadoAuditoria;
-    
+
     @Column(name = "fecha_creacion", insertable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 }
