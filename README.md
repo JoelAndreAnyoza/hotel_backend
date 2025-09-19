@@ -18,7 +18,7 @@ Permite administrar **habitaciones, reservas, clientes, empleados, pagos y servi
 - Spring Boot 3.5.5
 - Maven
 - PostgreSQL
-- JPA / Hibernate
+- JPA
 - Postman
 
 ---
