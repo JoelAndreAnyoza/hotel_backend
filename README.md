@@ -47,3 +47,5 @@ El sistema tiene como finalidad **gestionar las operaciones principales de un ho
 A continuación se muestra el modelo de la base de datos diseñado para el sistema:
 
 ![Modelo de datos](C:\javaSpring\hotel_backend\src\main\resources\static\HotelDB.png)
+<img width="711" height="612" alt="image" src="https://github.com/user-attachments/assets/61806804-6296-4df4-ae67-9ef342083468" />
+
