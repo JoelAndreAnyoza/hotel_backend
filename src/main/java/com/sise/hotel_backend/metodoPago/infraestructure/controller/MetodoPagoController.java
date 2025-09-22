@@ -34,7 +34,7 @@ public class MetodoPagoController {
             MetodoPagoResponseDto responseDto = metodoPagoApplicationService.insertarMetodoPago(requestDto);
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
