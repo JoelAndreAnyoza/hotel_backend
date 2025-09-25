@@ -1,10 +1,8 @@
 package com.sise.hotel_backend.estadosReserva.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,10 +13,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sise.hotel_backend.estadosReserva.application.dto.request.EstadoReservaRequestDto;
-import com.sise.hotel_backend.estadosReserva.application.dto.response.EstadoReservaResponseDto;
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.request.ActualizarEstadoReservaRequestDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.request.InsertarEstadoReservaRequestDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.response.ActualizarEstadoReservaResponseDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.response.EliminarEstadoReservaResponseDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.response.InsertarEstadoReservaResponseDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.response.ListarEstadoReservaResponseDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.response.ObtenerEstadoReservaResponseDto;
 import com.sise.hotel_backend.estadosReserva.application.service.EstadoReservaApplicationService;
-import com.sise.hotel_backend.estadosReserva.domain.entities.EstadoReserva;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/estadosReserva")
@@ -27,41 +32,59 @@ public class EstadoReservaController {
     private EstadoReservaApplicationService estadoReservaApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<EstadoReservaResponseDto> insertarEstadoReserva(@RequestBody EstadoReservaRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto> insertarEstadoReserva(
+        @Valid @RequestBody InsertarEstadoReservaRequestDto requestDto) {
         try {
-            EstadoReservaResponseDto responseDto = estadoReservaApplicationService.insertarEstadoReserva(requestDto);
-            return ResponseEntity.ok(responseDto);
+            InsertarEstadoReservaResponseDto responseDto = 
+            estadoReservaApplicationService.insertarEstadoReserva(requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
     }
 
     @GetMapping("")
-    public ResponseEntity<List<EstadoReserva>> listarEstadosReserva() {
-        return ResponseEntity.ok(estadoReservaApplicationService.listarEstadoReserva());
+    public ResponseEntity<BaseResponseDto> listarEstadosReserva() {
+        try {
+            List<ListarEstadoReservaResponseDto> responseDto =
+            estadoReservaApplicationService.listarEstadoReserva();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstadoReserva> obtenerEstadoReservaPorId(@PathVariable Integer id) {
-        Optional<EstadoReserva> estadoReserva = estadoReservaApplicationService.obtenerEstadoReservaPorId(id);
-        return estadoReserva.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerEstadoReservaPorId(@PathVariable Integer id) {
+        try {
+            ObtenerEstadoReservaResponseDto responseDto =
+            estadoReservaApplicationService.obtenerEstadoReservaPorId(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstadoReserva> actualizarEstadoReserva(@PathVariable Integer id, @RequestBody EstadoReserva estadoReserva) {
-        estadoReserva.setIdEstadoReserva(id);
-        EstadoReserva updated = estadoReservaApplicationService.actualizarEstadoReserva(estadoReserva);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
+    public ResponseEntity<BaseResponseDto> actualizarEstadoReserva(@PathVariable Integer id, 
+    @Valid @RequestBody ActualizarEstadoReservaRequestDto requestDto) {
+        try {
+            ActualizarEstadoReservaResponseDto responseDto = 
+            estadoReservaApplicationService.actualizarEstadoReserva(id, requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarEstadoReserva(@PathVariable Integer id) {
-        if (estadoReservaApplicationService.eliminarEstadoReserva(id)) {
-            return ResponseEntity.ok("Estado de Reserva eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarEstadoReserva(@PathVariable Integer id) {
+        try {
+            EliminarEstadoReservaResponseDto responseDto = 
+            estadoReservaApplicationService.eliminarEstadoReserva(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }
 }

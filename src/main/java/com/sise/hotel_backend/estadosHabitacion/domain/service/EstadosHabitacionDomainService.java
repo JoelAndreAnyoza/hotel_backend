@@ -28,18 +28,19 @@ public class EstadosHabitacionDomainService {
         return estadosHabitacionRepository.findById(id);
     }
 
-    public EstadosHabitacion actualizarEstadosHabitacion(EstadosHabitacion estadosHabitacion) {
-        if (estadosHabitacionRepository.existsById(estadosHabitacion.getIdEstadoHabitacion())) {
+    public EstadosHabitacion actualizarEstadosHabitacion(Integer id, EstadosHabitacion estadosHabitacion) {
+        if (estadosHabitacionRepository.existsById(id)) {
+            estadosHabitacion.setIdEstadoHabitacion(id);
             return estadosHabitacionRepository.saveAndFlush(estadosHabitacion);
         }
         return null;
     }
 
-    public boolean eliminarEstadoHabitacion(Integer id) {
+    public void eliminarEstadoHabitacion(Integer id) {
         if (estadosHabitacionRepository.existsById(id)) {
             estadosHabitacionRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Estado de habitación no encontrado");
         }
-        return false;
     }
 }

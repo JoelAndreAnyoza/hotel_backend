@@ -1,10 +1,8 @@
 package com.sise.hotel_backend.estadosHabitacion.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sise.hotel_backend.estadosHabitacion.application.dto.request.EstadoHabitacionRequestDto;
-import com.sise.hotel_backend.estadosHabitacion.application.dto.response.EstadoHabitacionResponseDto;
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.estadosHabitacion.application.dto.request.ActualizarEstadoHabitacionRequestDto;
+import com.sise.hotel_backend.estadosHabitacion.application.dto.request.InsertarEstadoHabitacionRequestDto;
+import com.sise.hotel_backend.estadosHabitacion.application.dto.response.ActualizarEstadoHabitacionResponseDto;
+import com.sise.hotel_backend.estadosHabitacion.application.dto.response.EliminarEstadoHabitacionResponseDto;
+import com.sise.hotel_backend.estadosHabitacion.application.dto.response.InsertarEstadoHabitacionResponseDto;
+import com.sise.hotel_backend.estadosHabitacion.application.dto.response.ListarEstadoHabitacionResponseDto;
+import com.sise.hotel_backend.estadosHabitacion.application.dto.response.ObtenerEstadoHabitacionResponseDto;
 import com.sise.hotel_backend.estadosHabitacion.application.service.EstadoHabitacionApplicationService;
-import com.sise.hotel_backend.estadosHabitacion.domain.entities.EstadosHabitacion;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/estadosHabitacion")
@@ -28,44 +32,59 @@ public class EstadoHabitacionController {
     private EstadoHabitacionApplicationService estadoHabitacionApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<EstadoHabitacionResponseDto> insertarEstadoHabitacion(
-        @RequestBody EstadoHabitacionRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto> insertarEstadoHabitacion(
+        @Valid @RequestBody InsertarEstadoHabitacionRequestDto requestDto) {
             try {
-                EstadoHabitacionResponseDto responseDto = estadoHabitacionApplicationService.insertarEstadoHabitacion(requestDto);
-                return ResponseEntity.ok(responseDto);
+                InsertarEstadoHabitacionResponseDto responseDto = 
+                estadoHabitacionApplicationService.insertarEstadoHabitacion(requestDto);
+                return ResponseEntity.ok(BaseResponseDto.success(responseDto));
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
             }
         }
 
     @GetMapping("")
-    public ResponseEntity<List<EstadosHabitacion>> listarEstadoHabitacion() {
-        return ResponseEntity.ok(estadoHabitacionApplicationService.listarEstadoHabitacion());
+    public ResponseEntity<BaseResponseDto> listarEstadoHabitacion() {
+        try {
+            List<ListarEstadoHabitacionResponseDto> responseDto = 
+            estadoHabitacionApplicationService.listarEstadoHabitacion();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstadosHabitacion> obtenerEstadoHabitacion(@PathVariable Integer id) {
-        Optional<EstadosHabitacion> estadoHabitacion = estadoHabitacionApplicationService.obtenerEstadoHabitacion(id);
-        return estadoHabitacion.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerEstadoHabitacion(@PathVariable Integer id) {
+        try {
+            ObtenerEstadoHabitacionResponseDto responseDto = 
+            estadoHabitacionApplicationService.obtenerEstadoHabitacion(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstadosHabitacion> actualizarEstadoHabitacion(@PathVariable Integer id, 
-    @RequestBody EstadosHabitacion estadosHabitacion) {
-        estadosHabitacion.setIdEstadoHabitacion(id);
-        EstadosHabitacion updated = estadoHabitacionApplicationService.actualizarEstadoHabitacion(estadosHabitacion);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
+    public ResponseEntity<BaseResponseDto> actualizarEstadoHabitacion(@PathVariable Integer id,
+        @Valid @RequestBody ActualizarEstadoHabitacionRequestDto requestDto) {
+        try {
+            ActualizarEstadoHabitacionResponseDto responseDto = 
+                estadoHabitacionApplicationService.actualizarEstadoHabitacion(id, requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarEstadoHabitacion(@PathVariable Integer id) {
-        if (estadoHabitacionApplicationService.eliminarEstadoHabitacion(id)) {
-            return ResponseEntity.ok("Estado de Habitacion eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarEstadoHabitacion(@PathVariable Integer id) {
+        try {
+            EliminarEstadoHabitacionResponseDto responseDto = 
+                estadoHabitacionApplicationService.eliminarEstadoHabitacion(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }
-
 }

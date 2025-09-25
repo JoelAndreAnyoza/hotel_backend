@@ -6,10 +6,19 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sise.hotel_backend.comodidad.application.dto.response.ComodidadResponseDto;
-import com.sise.hotel_backend.comodidad.application.mapper.ComodidadMapper;
+import com.sise.hotel_backend.comodidad.application.dto.response.ActualizarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.EliminarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.InsertarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.ListarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.ObtenerComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.mapper.ActualizarComodidadMapper;
+import com.sise.hotel_backend.comodidad.application.mapper.EliminarComodidadMapper;
+import com.sise.hotel_backend.comodidad.application.mapper.InsertarComodidadMapper;
+import com.sise.hotel_backend.comodidad.application.mapper.ListarComodidadMapper;
+import com.sise.hotel_backend.comodidad.application.mapper.ObtenerComodidadMapper;
 import com.sise.hotel_backend.comodidad.domain.service.ComodidadDomainService;
-import com.sise.hotel_backend.comodidad.application.dto.request.ComodidadRequestDto;
+import com.sise.hotel_backend.comodidad.application.dto.request.ActualizarComodidadRequestDto;
+import com.sise.hotel_backend.comodidad.application.dto.request.InsertarComodidadRequestDto;
 import com.sise.hotel_backend.comodidad.domain.entities.Comodidad;
 
 @Service
@@ -18,27 +27,46 @@ public class ComodidadApplicationService {
     ComodidadDomainService comodidadDomainService;
 
     @Autowired
-    ComodidadMapper comodidadMapper;
+    InsertarComodidadMapper insertarComodidadMapper;
+    @Autowired
+    ListarComodidadMapper listarComodidadMapper;
+    @Autowired
+    ObtenerComodidadMapper obtenerComodidadMapper;
+    @Autowired
+    ActualizarComodidadMapper actualizarComodidadMapper;
+    @Autowired
+    EliminarComodidadMapper eliminarComodidadMapper;
 
-    public ComodidadResponseDto insertarComodidad(ComodidadRequestDto requestDto) {
+    public InsertarComodidadResponseDto insertarComodidad(InsertarComodidadRequestDto requestDto) {
         Comodidad comodidad = comodidadDomainService.insertarComodidad(
-                comodidadMapper.requestToEntity(requestDto));
-        return comodidadMapper.entityToResponse(comodidad);
+                insertarComodidadMapper.requestToEntity(requestDto));
+        return insertarComodidadMapper.entityToResponse(comodidad);
     }
 
-    public List<Comodidad> listarComodidades() {
-        return comodidadDomainService.listarComodidades();
+    public List<ListarComodidadResponseDto> listarComodidades() {
+        List<Comodidad> comodidad = comodidadDomainService.listarComodidades();
+        return comodidad.stream()
+                .map(listarComodidadMapper::entityToResponse)
+                .toList();
     }
 
-    public Optional<Comodidad> obtenerComodidadPorId(Integer id) {
-        return comodidadDomainService.obtenerComodidad(id);
+    public ObtenerComodidadResponseDto obtenerComodidadPorId(Integer id) {
+        Optional<Comodidad> comodidad = comodidadDomainService.obtenerComodidad(id);
+        return comodidad.stream()
+                .map(obtenerComodidadMapper::entityToResponse)
+                .findFirst()
+                .orElse(null);
     }
 
-    public Comodidad actualizarComodidad(Comodidad comodidad) {
-        return comodidadDomainService.actualizarComodidad(comodidad);
+    public ActualizarComodidadResponseDto actualizarComodidad(Integer id, 
+    ActualizarComodidadRequestDto requestDto) {
+        Comodidad comodidad = comodidadDomainService.actualizarComodidad(id,
+                actualizarComodidadMapper.requestToEntity(requestDto));
+        return actualizarComodidadMapper.entityToResponse(comodidad);
     }
 
-    public boolean eliminarComodidad(Integer id) {
-        return comodidadDomainService.eliminarComodidad(id);
+    public EliminarComodidadResponseDto eliminarComodidad(Integer id) {
+        comodidadDomainService.eliminarComodidad(id);
+        return eliminarComodidadMapper.entityToResponse(true);
     }
 }

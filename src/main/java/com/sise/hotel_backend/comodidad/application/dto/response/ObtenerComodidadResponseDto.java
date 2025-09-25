@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class ComodidadResponseDto {
+public class ObtenerComodidadResponseDto {
     private Integer idComodidad;
     private String nombre;
     private String descripcion;

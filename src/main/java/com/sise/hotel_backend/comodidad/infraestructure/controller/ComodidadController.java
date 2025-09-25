@@ -1,18 +1,23 @@
 package com.sise.hotel_backend.comodidad.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sise.hotel_backend.comodidad.application.dto.request.ComodidadRequestDto;
-import com.sise.hotel_backend.comodidad.application.dto.response.ComodidadResponseDto;
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.request.ActualizarComodidadRequestDto;
+import com.sise.hotel_backend.comodidad.application.dto.request.InsertarComodidadRequestDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.ActualizarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.EliminarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.InsertarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.ListarComodidadResponseDto;
+import com.sise.hotel_backend.comodidad.application.dto.response.ObtenerComodidadResponseDto;
 import com.sise.hotel_backend.comodidad.application.service.ComodidadApplicationService;
-import com.sise.hotel_backend.comodidad.domain.entities.Comodidad;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,41 +33,59 @@ public class ComodidadController {
     private ComodidadApplicationService comodidadApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<ComodidadResponseDto> insertarComodidad(@RequestBody ComodidadRequestDto requestDto) {
-        try {
-            ComodidadResponseDto responseDto = comodidadApplicationService.insertarComodidad(requestDto);
-            return ResponseEntity.ok(responseDto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    public ResponseEntity<BaseResponseDto> insertarComodidad(
+        @Valid @RequestBody InsertarComodidadRequestDto requestDto) {
+            try {
+                InsertarComodidadResponseDto responseDto = 
+                comodidadApplicationService.insertarComodidad(requestDto);
+                return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+            } catch (Exception e) {
+                return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+            }
         }
-    }
 
     @GetMapping("")
-    public ResponseEntity<List<Comodidad>> listarComodidades() {
-        return ResponseEntity.ok(comodidadApplicationService.listarComodidades());
+    public ResponseEntity<BaseResponseDto> listarComodidades() {
+        try {
+            List<ListarComodidadResponseDto> responseDto =
+            comodidadApplicationService.listarComodidades();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comodidad> obtenerComodidadPorId(@PathVariable Integer id) {
-        Optional<Comodidad> comodidad = comodidadApplicationService.obtenerComodidadPorId(id);
-        return comodidad.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerComodidadPorId(@PathVariable Integer id) {
+        try {
+            ObtenerComodidadResponseDto responseDto =
+            comodidadApplicationService.obtenerComodidadPorId(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comodidad> actualizarComodidad(@PathVariable Integer id, @RequestBody Comodidad comodidad) {
-        comodidad.setIdComodidad(id);
-        Comodidad updated = comodidadApplicationService.actualizarComodidad(comodidad);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<BaseResponseDto> actualizarComodidad(@PathVariable Integer id, 
+    @Valid @RequestBody ActualizarComodidadRequestDto requestDto) {
+    try {
+        ActualizarComodidadResponseDto responseDto = 
+        comodidadApplicationService.actualizarComodidad(id, requestDto);
+        return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+    }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarComodidad(@PathVariable Integer id) {
-        if (comodidadApplicationService.eliminarComodidad(id)) {
-            return ResponseEntity.ok("documento eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarComodidad(@PathVariable Integer id) {
+        try {
+            EliminarComodidadResponseDto responseDto = 
+            comodidadApplicationService.eliminarComodidad(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));  
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }
 }

@@ -28,18 +28,19 @@ public class EstadoReservaDomainService {
         return estadoReservaRepository.findAll();
     }
 
-    public EstadoReserva actualizarEstadoReserva(EstadoReserva estadoReserva) {
-        if (estadoReservaRepository.existsById(estadoReserva.getIdEstadoReserva())) {
+    public EstadoReserva actualizarEstadoReserva(Integer id, EstadoReserva estadoReserva) {
+        if (estadoReservaRepository.existsById(id)) {
+            estadoReserva.setIdEstadoReserva(id);
             return estadoReservaRepository.saveAndFlush(estadoReserva);
         }
         return null;
     }
 
-    public boolean eliminarEstadoReserva(Integer id) {
+    public void eliminarEstadoReserva(Integer id) {
         if (estadoReservaRepository.existsById(id)) {
             estadoReservaRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Estado de Reserva no encontrado");
         }
-        return false;
     }
 }

@@ -3,16 +3,16 @@ package com.sise.hotel_backend.estadosReserva.application.mapper;
 import org.springframework.stereotype.Component;
 
 import com.sise.hotel_backend.common.application.IEntityDtoMapper;
-import com.sise.hotel_backend.estadosReserva.application.dto.request.EstadoReservaRequestDto;
-import com.sise.hotel_backend.estadosReserva.application.dto.response.EstadoReservaResponseDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.request.ActualizarEstadoReservaRequestDto;
+import com.sise.hotel_backend.estadosReserva.application.dto.response.ActualizarEstadoReservaResponseDto;
 import com.sise.hotel_backend.estadosReserva.domain.entities.EstadoReserva;
 
 @Component
-public class EstadoReservaMapper 
-implements IEntityDtoMapper<EstadoReserva, EstadoReservaRequestDto, EstadoReservaResponseDto> {
-    
+public class ActualizarEstadoReservaMapper 
+implements IEntityDtoMapper<EstadoReserva,ActualizarEstadoReservaRequestDto, ActualizarEstadoReservaResponseDto>{
+
     @Override
-    public EstadoReserva requestToEntity(EstadoReservaRequestDto requestDto) {
+    public EstadoReserva requestToEntity(ActualizarEstadoReservaRequestDto requestDto) {
         EstadoReserva estadoReserva = new EstadoReserva();
         estadoReserva.setNombre(requestDto.getNombre());
         estadoReserva.setDescripcion(requestDto.getDescripcion());
@@ -20,8 +20,8 @@ implements IEntityDtoMapper<EstadoReserva, EstadoReservaRequestDto, EstadoReserv
     }
 
     @Override
-    public EstadoReservaResponseDto entityToResponse(EstadoReserva entity) {
-        EstadoReservaResponseDto responseDto = new EstadoReservaResponseDto();
+    public ActualizarEstadoReservaResponseDto entityToResponse(EstadoReserva entity) {
+        ActualizarEstadoReservaResponseDto responseDto = new ActualizarEstadoReservaResponseDto();
         responseDto.setIdEstadoReserva(entity.getIdEstadoReserva());
         responseDto.setNombre(entity.getNombre());
         responseDto.setDescripcion(entity.getDescripcion());

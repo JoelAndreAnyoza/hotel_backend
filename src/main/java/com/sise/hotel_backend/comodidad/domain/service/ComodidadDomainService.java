@@ -27,18 +27,19 @@ public class ComodidadDomainService {
         return comodidadRepository.findAll();
     }
 
-    public Comodidad actualizarComodidad(Comodidad comodidad) {
-        if (comodidadRepository.existsById(comodidad.getIdComodidad())) {
+    public Comodidad actualizarComodidad(Integer id, Comodidad comodidad) {
+        if (comodidadRepository.existsById(id)) {
+            comodidad.setIdComodidad(id);
             return comodidadRepository.saveAndFlush(comodidad);
         }
         return null;
     }
 
-    public boolean eliminarComodidad(Integer id) {
+    public void eliminarComodidad(Integer id) {
         if (comodidadRepository.existsById(id)) {
             comodidadRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Comodidad no encontrada");
         }
-        return false;
     }
 }
