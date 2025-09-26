@@ -27,18 +27,19 @@ public class HabitacionDomainService {
         return habitacionRepository.findAll();
     }
 
-    public Habitacion actualizarHabitacion(Habitacion habitacion) {
-        if (habitacionRepository.existsById(habitacion.getIdHabitacion())) {
+    public Habitacion actualizarHabitacion(Integer id, Habitacion habitacion) {
+        if (habitacionRepository.existsById(id)) {
+            habitacion.setIdHabitacion(id);
             return habitacionRepository.saveAndFlush(habitacion);
         }
         return null;
     }
 
-    public boolean eliminarHabitacion(Integer id) {
+    public void eliminarHabitacion(Integer id) {
         if (habitacionRepository.existsById(id)) {
             habitacionRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Habitacion no encontrado");
         }
-        return false;
     }
 }

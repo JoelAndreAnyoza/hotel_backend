@@ -1,10 +1,8 @@
 package com.sise.hotel_backend.metodoPago.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +10,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sise.hotel_backend.metodoPago.application.dto.request.MetodoPagoRequestDto;
-import com.sise.hotel_backend.metodoPago.application.dto.response.MetodoPagoResponseDto;
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.metodoPago.application.dto.request.ActualizarMetodoPagoRequestDto;
+import com.sise.hotel_backend.metodoPago.application.dto.request.InsertarMetodoPagoRequestDto;
+import com.sise.hotel_backend.metodoPago.application.dto.response.ActualizarMetodoPagoResponseDto;
+import com.sise.hotel_backend.metodoPago.application.dto.response.EliminarMetodoPagoResponseDto;
+import com.sise.hotel_backend.metodoPago.application.dto.response.InsertarMetodoPagoResponseDto;
+import com.sise.hotel_backend.metodoPago.application.dto.response.ListarMetodoPagoResponseDto;
+import com.sise.hotel_backend.metodoPago.application.dto.response.ObtenerMetodoPagoResponseDto;
 import com.sise.hotel_backend.metodoPago.application.service.MetodoPagoApplicationService;
-import com.sise.hotel_backend.metodoPago.domain.entities.MetodoPago;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,46 +34,59 @@ public class MetodoPagoController {
     private MetodoPagoApplicationService metodoPagoApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<MetodoPagoResponseDto> insertarMetdoPago(@RequestBody MetodoPagoRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto> insertarMetdoPago(
+        @Valid @RequestBody InsertarMetodoPagoRequestDto requestDto) {
         try {
-            MetodoPagoResponseDto responseDto = metodoPagoApplicationService.insertarMetodoPago(requestDto);
-            return ResponseEntity.ok(responseDto);
+            InsertarMetodoPagoResponseDto responseDto = 
+            metodoPagoApplicationService.insertarMetodoPago(requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
     }
 
     @GetMapping("")
-    public ResponseEntity<List<MetodoPago>> listarMetodosPago() {
-        return ResponseEntity.ok(metodoPagoApplicationService.listarMetodosPago());
+    public ResponseEntity<BaseResponseDto> listarMetodosPago() {
+        try {
+            List<ListarMetodoPagoResponseDto> responseDto =
+            metodoPagoApplicationService.listarMetodosPago();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MetodoPago> obtenerMetodoPagoPorId(@PathVariable Integer id) {
-        Optional<MetodoPago> metodoPago = metodoPagoApplicationService.obtenerMetodoPagoPorId(id);
-        return metodoPago.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerMetodoPagoPorId(@PathVariable Integer id) {
+        try {
+            ObtenerMetodoPagoResponseDto responseDto =
+            metodoPagoApplicationService.obtenerMetodoPagoPorId(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MetodoPago> actualizarMetodoPago(@PathVariable Integer id,
-            @RequestBody MetodoPago metodoPago) {
+    public ResponseEntity<BaseResponseDto> actualizarMetodoPago(@PathVariable Integer id,
+        @Valid @RequestBody ActualizarMetodoPagoRequestDto requestDto) {
         try {
-            metodoPago.setIdMetodoPago(id);
-            MetodoPago updated = metodoPagoApplicationService.actualizarMetodoPago(metodoPago);
-            if (updated != null) {
-                return ResponseEntity.ok(updated);
-            }
-            return ResponseEntity.notFound().build();
+            ActualizarMetodoPagoResponseDto responseDto = 
+            metodoPagoApplicationService.actualizarMetodoPago(id, requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(null);
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarMetodoPago(@PathVariable Integer id) {
-        if (metodoPagoApplicationService.eliminarMetodoPago(id)) {
-            return ResponseEntity.ok("metodo de pago eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarMetodoPago(@PathVariable Integer id) {
+        try {
+            EliminarMetodoPagoResponseDto responseDto = 
+            metodoPagoApplicationService.eliminarMetodoPago(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }
 }

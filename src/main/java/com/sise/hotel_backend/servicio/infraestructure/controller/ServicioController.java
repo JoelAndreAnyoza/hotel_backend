@@ -1,10 +1,8 @@
 package com.sise.hotel_backend.servicio.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +13,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sise.hotel_backend.servicio.application.dto.request.ServicioRequestDto;
-import com.sise.hotel_backend.servicio.application.dto.response.ServicioResponseDto;
-import com.sise.hotel_backend.servicio.domain.entities.Servicio;
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.servicio.application.dto.request.ActualizarServicioRequestDto;
+import com.sise.hotel_backend.servicio.application.dto.request.InsertarServicioRequestDto;
+import com.sise.hotel_backend.servicio.application.dto.response.ActualizarServicioResponseDto;
+import com.sise.hotel_backend.servicio.application.dto.response.EliminarServicioResponseDto;
+import com.sise.hotel_backend.servicio.application.dto.response.InsertarServicioResponseDto;
+import com.sise.hotel_backend.servicio.application.dto.response.ListarServicioResponseDto;
+import com.sise.hotel_backend.servicio.application.dto.response.ObtenerServicioResponseDto;
+
+import jakarta.validation.Valid;
+
 import com.sise.hotel_backend.servicio.application.service.ServicioApplicationService;
 
 @Controller
@@ -27,46 +33,59 @@ public class ServicioController {
     private ServicioApplicationService servicioApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<ServicioResponseDto> insertarServicio(@RequestBody ServicioRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto> insertarServicio(
+        @Valid @RequestBody InsertarServicioRequestDto requestDto) {
         try {
-            ServicioResponseDto responseDto = servicioApplicationService.insertarServicio(requestDto);
-            return ResponseEntity.ok(responseDto);
+            InsertarServicioResponseDto responseDto = 
+            servicioApplicationService.insertarServicio(requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Servicio>> listarServicios() {
-        return ResponseEntity.ok(servicioApplicationService.listarServicios());
+    public ResponseEntity<BaseResponseDto> listarServicios() {
+        try {
+            List<ListarServicioResponseDto> responseDto =
+            servicioApplicationService.listarServicios();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Servicio> obtenerServicioPorId(@PathVariable Integer id) {
-        Optional<Servicio> servicio = servicioApplicationService.obtenerServicioPorId(id);
-        return servicio.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerServicioPorId(@PathVariable Integer id) {
+        try {
+            ObtenerServicioResponseDto responseDto =
+            servicioApplicationService.obtenerServicioPorId(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Servicio> actualizarServicio(@PathVariable Integer id,
-            @RequestBody Servicio servicio) {
+    public ResponseEntity<BaseResponseDto> actualizarServicio(@PathVariable Integer id,
+        @Valid @RequestBody ActualizarServicioRequestDto requestDto) {
         try {
-            servicio.setIdServicio(id);
-            Servicio updated = servicioApplicationService.actualizarServicio(servicio);
-            if (updated != null) {
-                return ResponseEntity.ok(updated);
-            }
-            return ResponseEntity.notFound().build();
+            ActualizarServicioResponseDto responseDto = 
+            servicioApplicationService.actualizarServicio(id, requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(null);
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarServicio(@PathVariable Integer id) {
-        if (servicioApplicationService.eliminarServicio(id)) {
-            return ResponseEntity.ok("servicio eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarServicio(@PathVariable Integer id) {
+        try {
+            EliminarServicioResponseDto responseDto = 
+            servicioApplicationService.eliminarServicio(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }
 }

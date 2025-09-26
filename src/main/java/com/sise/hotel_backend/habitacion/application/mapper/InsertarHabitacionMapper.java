@@ -3,16 +3,16 @@ package com.sise.hotel_backend.habitacion.application.mapper;
 import org.springframework.stereotype.Component;
 
 import com.sise.hotel_backend.common.application.IEntityDtoMapper;
-import com.sise.hotel_backend.habitacion.application.dto.request.HabitacionRequestDto;
-import com.sise.hotel_backend.habitacion.application.dto.response.HabitacionResponseDto;
+import com.sise.hotel_backend.habitacion.application.dto.request.InsertarHabitacionRequestDto;
+import com.sise.hotel_backend.habitacion.application.dto.response.InsertarHabitacionResponseDto;
 import com.sise.hotel_backend.habitacion.domain.entities.Habitacion;
 
 @Component
-public class HabitacionMapper 
-implements IEntityDtoMapper<Habitacion, HabitacionRequestDto, HabitacionResponseDto> {
+public class InsertarHabitacionMapper 
+implements IEntityDtoMapper<Habitacion, InsertarHabitacionRequestDto, InsertarHabitacionResponseDto> {
 
     @Override
-    public Habitacion requestToEntity(HabitacionRequestDto requestDto) {
+    public Habitacion requestToEntity(InsertarHabitacionRequestDto requestDto) {
         Habitacion habitacion = new Habitacion();
         habitacion.setIdTipoHabitacion(requestDto.getIdTipoHabitacion());
         habitacion.setIdEstadoHabitacion(requestDto.getIdEstadoHabitacion());
@@ -22,8 +22,8 @@ implements IEntityDtoMapper<Habitacion, HabitacionRequestDto, HabitacionResponse
     }
 
     @Override
-    public HabitacionResponseDto entityToResponse(Habitacion entity) {
-        HabitacionResponseDto responseDto = new HabitacionResponseDto();
+    public InsertarHabitacionResponseDto entityToResponse(Habitacion entity) {
+        InsertarHabitacionResponseDto responseDto = new InsertarHabitacionResponseDto();
         responseDto.setIdHabitacion(entity.getIdHabitacion());
         responseDto.setIdTipoHabitacion(entity.getIdTipoHabitacion());
         responseDto.setIdEstadoHabitacion(entity.getIdEstadoHabitacion());

@@ -28,18 +28,19 @@ public class MetodoPagoDomainService {
         return metodoPagoRepository.findById(id);
     }
 
-    public MetodoPago actualizarMetodoPago(MetodoPago metodoPago) {
-        if (metodoPagoRepository.existsById(metodoPago.getIdMetodoPago())) {
+    public MetodoPago actualizarMetodoPago(Integer id, MetodoPago metodoPago) {
+        if (metodoPagoRepository.existsById(id)) {
+            metodoPago.setIdMetodoPago(id);
             return metodoPagoRepository.saveAndFlush(metodoPago);
         }
         return null;
     }
 
-    public boolean eliminarMetodoPago(Integer id) {
+    public void eliminarMetodoPago(Integer id) {
         if (metodoPagoRepository.existsById(id)) {
             metodoPagoRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Metodo de Pago no encontrado");
         }
-        return false;
     }
 }

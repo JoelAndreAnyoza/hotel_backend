@@ -28,18 +28,19 @@ public class ServicioDomainService {
         return servicioRepository.findById(id);
     }
 
-    public Servicio actualizarServicio(Servicio servicio) {
-        if (servicioRepository.existsById(servicio.getIdServicio())) {
+    public Servicio actualizarServicio(Integer id, Servicio servicio) {
+        if (servicioRepository.existsById(id)) {
+            servicio.setIdServicio(id);
             return servicioRepository.saveAndFlush(servicio);
         }
         return null;
     }
 
-    public boolean eliminarServicio(Integer id) {
+    public void eliminarServicio(Integer id) {
         if (servicioRepository.existsById(id)) {
             servicioRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Servicio no encontrado");
         }
-        return false;
     }
 }

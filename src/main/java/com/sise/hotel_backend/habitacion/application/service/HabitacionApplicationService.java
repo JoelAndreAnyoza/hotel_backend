@@ -6,9 +6,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sise.hotel_backend.habitacion.application.dto.request.HabitacionRequestDto;
-import com.sise.hotel_backend.habitacion.application.dto.response.HabitacionResponseDto;
-import com.sise.hotel_backend.habitacion.application.mapper.HabitacionMapper;
+import com.sise.hotel_backend.habitacion.application.dto.request.ActualizarHabitacionRequestDto;
+import com.sise.hotel_backend.habitacion.application.dto.request.InsertarHabitacionRequestDto;
+import com.sise.hotel_backend.habitacion.application.dto.response.ActualizarHabitacionResponseDto;
+import com.sise.hotel_backend.habitacion.application.dto.response.EliminarHabitacionResponseDto;
+import com.sise.hotel_backend.habitacion.application.dto.response.InsertarHabitacionResponseDto;
+import com.sise.hotel_backend.habitacion.application.dto.response.ListarHabitacionResponseDto;
+import com.sise.hotel_backend.habitacion.application.dto.response.ObtenerHabitacionResponseDto;
+import com.sise.hotel_backend.habitacion.application.mapper.ActualizarHabitacionMapper;
+import com.sise.hotel_backend.habitacion.application.mapper.EliminarHabitacionMapper;
+import com.sise.hotel_backend.habitacion.application.mapper.InsertarHabitacionMapper;
+import com.sise.hotel_backend.habitacion.application.mapper.ListarHabitacionMapper;
+import com.sise.hotel_backend.habitacion.application.mapper.ObtenerHabitacionMapper;
 import com.sise.hotel_backend.habitacion.domain.entities.Habitacion;
 import com.sise.hotel_backend.habitacion.domain.service.HabitacionDomainService;
 
@@ -18,27 +27,46 @@ public class HabitacionApplicationService {
     HabitacionDomainService habitacionDomainService;
 
     @Autowired
-    HabitacionMapper habitacionMapper;
+    InsertarHabitacionMapper insertarHabitacionMapper;
+    @Autowired
+    ListarHabitacionMapper listarHabitacionMapper;
+    @Autowired
+    ObtenerHabitacionMapper obtenerHabitacionMapper;
+    @Autowired
+    ActualizarHabitacionMapper actualizarHabitacionMapper;
+    @Autowired
+    EliminarHabitacionMapper eliminarHabitacionMapper;
 
-    public HabitacionResponseDto insertarHabitacion(HabitacionRequestDto requestDto) {
+    public InsertarHabitacionResponseDto insertarHabitacion(InsertarHabitacionRequestDto requestDto) {
         Habitacion habitacion = habitacionDomainService.insertarHabitacion(
-                habitacionMapper.requestToEntity(requestDto));
-        return habitacionMapper.entityToResponse(habitacion);
+                insertarHabitacionMapper.requestToEntity(requestDto));
+        return insertarHabitacionMapper.entityToResponse(habitacion);
     }
 
-    public List<Habitacion> listarHabitacion() {
-        return habitacionDomainService.listarHabitaciones();
+    public List<ListarHabitacionResponseDto> listarHabitacion() {
+        List<Habitacion> habitacions = habitacionDomainService.listarHabitaciones();
+        return habitacions.stream()
+                .map(listarHabitacionMapper::entityToResponse)
+                .toList();
     }
 
-    public Optional<Habitacion> obtenerHabitacionPorId(Integer id) {
-        return habitacionDomainService.obtenerHabitacion(id);
+    public ObtenerHabitacionResponseDto obtenerHabitacionPorId(Integer id) {
+        Optional<Habitacion> habitacion = habitacionDomainService.obtenerHabitacion(id);
+        return habitacion.stream()
+                .map(obtenerHabitacionMapper::entityToResponse)
+                .findFirst()
+                .orElse(null);
     }
 
-    public Habitacion actualizarHabitacion(Habitacion habitacion) {
-        return habitacionDomainService.actualizarHabitacion(habitacion);
+    public ActualizarHabitacionResponseDto actualizarHabitacion(Integer id, 
+    ActualizarHabitacionRequestDto requestDto) {
+        Habitacion habitacion = habitacionDomainService.actualizarHabitacion(id,
+                actualizarHabitacionMapper.requestToEntity(requestDto));
+        return actualizarHabitacionMapper.entityToResponse(habitacion);
     }
 
-    public boolean eliminarHabitacion(Integer id) {
-        return habitacionDomainService.eliminarHabitacion(id);
+    public EliminarHabitacionResponseDto eliminarHabitacion(Integer id) {
+        habitacionDomainService.eliminarHabitacion(id);
+        return eliminarHabitacionMapper.entityToResponse(true);    
     }
 }
