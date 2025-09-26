@@ -1,10 +1,8 @@
 package com.sise.hotel_backend.usuario.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sise.hotel_backend.usuario.application.dto.request.UsuarioRequestDto;
-import com.sise.hotel_backend.usuario.application.dto.response.UsuarioResponseDto;
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.usuario.application.dto.request.ActualizarUsuarioRequestDto;
+import com.sise.hotel_backend.usuario.application.dto.request.InsertarUsuarioRequestDto;
+import com.sise.hotel_backend.usuario.application.dto.response.ActualizarUsuarioResponseDto;
+import com.sise.hotel_backend.usuario.application.dto.response.EliminarUsuarioResponseDto;
+import com.sise.hotel_backend.usuario.application.dto.response.InsertarUsuarioResponseDto;
+import com.sise.hotel_backend.usuario.application.dto.response.ListarUsuarioResponseDto;
+import com.sise.hotel_backend.usuario.application.dto.response.ObtenerUsuarioResponseDto;
 import com.sise.hotel_backend.usuario.application.service.UsuarioApplicationService;
-import com.sise.hotel_backend.usuario.domain.entities.Usuario;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -28,43 +33,60 @@ public class UsuarioController {
     private UsuarioApplicationService usuarioApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<UsuarioResponseDto> insertarUsuario(
-        @RequestBody UsuarioRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto> insertarUsuario(
+        @Valid @RequestBody InsertarUsuarioRequestDto requestDto) {
             try {
-                UsuarioResponseDto responseDto = usuarioApplicationService.insertarUsuario(requestDto);
-                return ResponseEntity.ok(responseDto);
+                InsertarUsuarioResponseDto responseDto = 
+                usuarioApplicationService.insertarUsuario(requestDto);
+                return ResponseEntity.ok(BaseResponseDto.success(responseDto));
             } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
             }
         }
     
     @GetMapping("")
-    public ResponseEntity<List<Usuario>> listarUsuarios(){
-        return ResponseEntity.ok(usuarioApplicationService.listarUsuarios());
+    public ResponseEntity<BaseResponseDto> listarUsuarios(){
+        try {
+            List<ListarUsuarioResponseDto> responseDto =
+            usuarioApplicationService.listarUsuarios();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Integer id) {
-        Optional<Usuario> usuario = usuarioApplicationService.obtenerUsuarioPorId(id);
-        return usuario.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerUsuarioPorId(@PathVariable Integer id) {
+        try {
+            ObtenerUsuarioResponseDto responseDto =
+            usuarioApplicationService.obtenerUsuarioPorId(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Integer id, @RequestBody Usuario usuario) {
-        usuario.setIdUsuario(id);
-        Usuario updated = usuarioApplicationService.actualizarUsuario(usuario);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
+    public ResponseEntity<BaseResponseDto> actualizarUsuario(@PathVariable Integer id, 
+    @Valid @RequestBody ActualizarUsuarioRequestDto requestDto) {
+        try {
+            ActualizarUsuarioResponseDto responseDto = 
+            usuarioApplicationService.actualizarUsuario(id, requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarUsuario(@PathVariable Integer id) {
-        if (usuarioApplicationService.eliminarUsuario(id)) {
-            return ResponseEntity.ok("Usuario eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarUsuario(@PathVariable Integer id) {
+        try {
+            EliminarUsuarioResponseDto responseDto = 
+            usuarioApplicationService.eliminarUsuario(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }
     
 }

@@ -3,15 +3,16 @@ package com.sise.hotel_backend.usuario.application.mapper;
 import org.springframework.stereotype.Component;
 
 import com.sise.hotel_backend.common.application.IEntityDtoMapper;
-import com.sise.hotel_backend.usuario.application.dto.request.UsuarioRequestDto;
-import com.sise.hotel_backend.usuario.application.dto.response.UsuarioResponseDto;
+import com.sise.hotel_backend.usuario.application.dto.request.ActualizarUsuarioRequestDto;
+import com.sise.hotel_backend.usuario.application.dto.response.ActualizarUsuarioResponseDto;
 import com.sise.hotel_backend.usuario.domain.entities.Usuario;
 
 @Component
-public class UsuarioMapper implements IEntityDtoMapper<Usuario, UsuarioRequestDto, UsuarioResponseDto>{
+public class ActualizarUsuarioMapper 
+implements IEntityDtoMapper<Usuario, ActualizarUsuarioRequestDto, ActualizarUsuarioResponseDto>{
     
     @Override
-    public Usuario requestToEntity(UsuarioRequestDto requestDto) {
+    public Usuario requestToEntity(ActualizarUsuarioRequestDto requestDto) {
         Usuario usuario = new Usuario();
         usuario.setIdTipoDocumento(requestDto.getIdTipoDocumento());
         usuario.setUsername(requestDto.getUsername());
@@ -27,12 +28,13 @@ public class UsuarioMapper implements IEntityDtoMapper<Usuario, UsuarioRequestDt
     }
 
     @Override
-    public UsuarioResponseDto entityToResponse(Usuario entity) {
-        UsuarioResponseDto responseDto = new UsuarioResponseDto();
+    public ActualizarUsuarioResponseDto entityToResponse(Usuario entity) {
+        ActualizarUsuarioResponseDto responseDto = new ActualizarUsuarioResponseDto();
         responseDto.setIdUsuario(entity.getIdUsuario());
         responseDto.setIdTipoDocumento(entity.getIdTipoDocumento());
         responseDto.setUsername(entity.getUsername());
         responseDto.setEmail(entity.getEmail());
+        responseDto.setContrasenia(entity.getContrasenia());
         responseDto.setNombres(entity.getNombres());
         responseDto.setApellidoPaterno(entity.getApellidoPaterno());
         responseDto.setApellidoMaterno(entity.getApellidoMaterno());

@@ -1,9 +1,12 @@
-package com.sise.hotel_backend.usuario.application.dto.request;
+package com.sise.hotel_backend.usuario.application.dto.response;
+
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
 @Data
-public class UsuarioRequestDto {
+public class ListarUsuarioResponseDto {
+    private Integer idUsuario;
     private Integer idTipoDocumento;
     private String username;
     private String email;
@@ -14,4 +17,5 @@ public class UsuarioRequestDto {
     private String nroDocumento;
     private String telefono;
     private String direccion;
+    private LocalDateTime fechaCreacion;
 }

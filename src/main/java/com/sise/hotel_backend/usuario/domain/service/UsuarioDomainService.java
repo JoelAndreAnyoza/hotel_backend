@@ -16,30 +16,53 @@ public class UsuarioDomainService {
     UsuarioRepository usuarioRepository;
 
     public Usuario insertarUsuario(Usuario usuario) {
+        if (usuarioRepository.existsByUsername(usuario.getUsername())) {
+            throw new IllegalArgumentException("El username ya está registrado");
+        }
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+            throw new IllegalArgumentException("El email ya está registrado");
+        }
+        if (usuarioRepository.existsByNroDocumento(usuario.getNroDocumento())) {
+            throw new IllegalArgumentException("El número de documento ya está registrado");
+        }
         Usuario newUsuario = usuarioRepository.saveAndFlush(usuario);
         return usuarioRepository.findById(newUsuario.getIdUsuario()).orElse(null);
     }
 
     public Optional<Usuario> obtenerUsuarioPorId(Integer id) {
-        return usuarioRepository.findById(id);
+        if (usuarioRepository.existsById(id)) {
+            return usuarioRepository.findById(id);
+        } else {
+            throw new RuntimeException("Usuario no encontrado");
+        }
     }
 
     public List<Usuario> listarUsuario(){
         return usuarioRepository.findAll();
     }
 
-    public Usuario actualizarUsuario(Usuario usuario){
-        if (usuarioRepository.existsById(usuario.getIdUsuario())) {
-            return usuarioRepository.saveAndFlush(usuario);
+    public Usuario actualizarUsuario(Integer id,Usuario usuario){
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado");
         }
-        return null;
+        if (usuarioRepository.existsByUsername(usuario.getUsername())) {
+            throw new IllegalArgumentException("El username ya está registrado");
+        }
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+            throw new IllegalArgumentException("El email ya está registrado");
+        }
+        if (usuarioRepository.existsByNroDocumento(usuario.getNroDocumento())) {
+            throw new IllegalArgumentException("El número de documento ya está registrado");
+        }
+        usuario.setIdUsuario(id);
+        return usuarioRepository.saveAndFlush(usuario);
     }
 
-    public boolean eliminarUsuario(Integer id) {
+    public void eliminarUsuario(Integer id) {
         if (usuarioRepository.existsById(id)) {
             usuarioRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Usuario no encontrado");
         }
-        return false;
     }
 }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class UsuarioResponseDto {
+public class InsertarUsuarioResponseDto {
     private Integer idUsuario;
     private Integer idTipoDocumento;
     private String username;
