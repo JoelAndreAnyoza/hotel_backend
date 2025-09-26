@@ -1,10 +1,8 @@
 package com.sise.hotel_backend.tipoDocumento.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.tipoDocumento.application.dto.request.ActualizarTipoDocumentoRequestDto;
 import com.sise.hotel_backend.tipoDocumento.application.dto.request.InsertarTipoDocumentoRequestDto;
+import com.sise.hotel_backend.tipoDocumento.application.dto.response.ActualizarTipoDocumentoResponseDto;
+import com.sise.hotel_backend.tipoDocumento.application.dto.response.EliminarTipoDocumentoResponseDto;
 import com.sise.hotel_backend.tipoDocumento.application.dto.response.InsertarTipoDocumentoResponseDto;
+import com.sise.hotel_backend.tipoDocumento.application.dto.response.ListarTipoDocumentoResponseDto;
+import com.sise.hotel_backend.tipoDocumento.application.dto.response.ObtenerTipoDocumentoResponseDto;
 import com.sise.hotel_backend.tipoDocumento.application.service.TipoDocumentoApplicationService;
-import com.sise.hotel_backend.tipoDocumento.domain.entities.TipoDocumento;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tiposDocumento")
@@ -28,42 +33,59 @@ public class TipoDocumentoController {
     private TipoDocumentoApplicationService tipoDocumentoApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<InsertarTipoDocumentoResponseDto> insertarTipoDocumento(
-        @RequestBody InsertarTipoDocumentoRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto> insertarTipoDocumento(
+        @Valid @RequestBody InsertarTipoDocumentoRequestDto requestDto) {
             try {
-                InsertarTipoDocumentoResponseDto responseDto = tipoDocumentoApplicationService.insertarTipoDocumento(requestDto);
-                return ResponseEntity.ok(responseDto);
+                InsertarTipoDocumentoResponseDto responseDto = 
+                tipoDocumentoApplicationService.insertarTipoDocumento(requestDto);
+                return ResponseEntity.ok(BaseResponseDto.success(responseDto));
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
             }
         }
 
     @GetMapping("")
-    public ResponseEntity<List<TipoDocumento>> listarTipoDocumento() {
-        return ResponseEntity.ok(tipoDocumentoApplicationService.listarTipoDocumento());
+    public ResponseEntity<BaseResponseDto> listarTipoDocumento() {
+        try {
+            List<ListarTipoDocumentoResponseDto> responseDto =
+            tipoDocumentoApplicationService.listarTipoDocumento();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TipoDocumento> obtenerTipoDocumentoPorId(@PathVariable Integer id) {
-        Optional<TipoDocumento> tipoDocumento = tipoDocumentoApplicationService.obtenerTipoDocumentoPorId(id);
-        return tipoDocumento.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerTipoDocumentoPorId(@PathVariable Integer id) {
+        try {
+            ObtenerTipoDocumentoResponseDto responseDto =
+            tipoDocumentoApplicationService.obtenerTipoDocumentoPorId(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoDocumento> actualizarTipoDocumento(@PathVariable Integer id, @RequestBody TipoDocumento tipoDocumento) {
-        tipoDocumento.setIdTipoDocumento(id);
-        TipoDocumento updated = tipoDocumentoApplicationService.actualizarTipoDocumento(tipoDocumento);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
+    public ResponseEntity<BaseResponseDto> actualizarTipoDocumento(@PathVariable Integer id, 
+    @Valid @RequestBody ActualizarTipoDocumentoRequestDto requestDto) {
+        try {
+            ActualizarTipoDocumentoResponseDto responseDto = 
+            tipoDocumentoApplicationService.actualizarTipoDocumento(id, requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarTipoDocumento(@PathVariable Integer id) {
-        if (tipoDocumentoApplicationService.eliminarTipoDocumento(id)) {
-            return ResponseEntity.ok("Tipo de documento eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarTipoDocumento(@PathVariable Integer id) {
+        try {
+            EliminarTipoDocumentoResponseDto responseDto = 
+            tipoDocumentoApplicationService.eliminarTipoDocumento(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }    
 }

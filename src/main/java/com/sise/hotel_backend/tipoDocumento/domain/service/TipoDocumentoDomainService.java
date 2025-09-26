@@ -28,18 +28,19 @@ public class TipoDocumentoDomainService {
         return tipoDocumentoRepository.findAll();
     }
 
-    public TipoDocumento actualizarTipoDocumento(TipoDocumento tipoDocumento) {
-        if (tipoDocumentoRepository.existsById(tipoDocumento.getIdTipoDocumento())) {
+    public TipoDocumento actualizarTipoDocumento(Integer id, TipoDocumento tipoDocumento) {
+        if (tipoDocumentoRepository.existsById(id)) {
+            tipoDocumento.setIdTipoDocumento(id);
             return tipoDocumentoRepository.saveAndFlush(tipoDocumento);
         }
         return null;
     }
 
-    public boolean eliminarTipoDocumento(Integer id) {
+    public void eliminarTipoDocumento(Integer id) {
         if (tipoDocumentoRepository.existsById(id)) {
             tipoDocumentoRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Tipo de Documento no encontrado");
         }
-        return false;
     }
 }

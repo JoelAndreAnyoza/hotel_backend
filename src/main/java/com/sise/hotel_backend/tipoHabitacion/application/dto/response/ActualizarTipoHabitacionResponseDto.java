@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class TipoHabitacionResponseDto {
+public class ActualizarTipoHabitacionResponseDto {
     private Integer idTipoHabitacion;
     private String nombre;
     private String descripcion;

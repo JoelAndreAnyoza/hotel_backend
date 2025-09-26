@@ -1,10 +1,8 @@
 package com.sise.hotel_backend.tipoHabitacion.infraestructure.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sise.hotel_backend.tipoHabitacion.application.dto.request.TipoHabitacionRequestDto;
-import com.sise.hotel_backend.tipoHabitacion.application.dto.response.TipoHabitacionResponseDto;
+import com.sise.hotel_backend.common.dto.response.BaseResponseDto;
+import com.sise.hotel_backend.tipoHabitacion.application.dto.request.ActualizarTipoHabitacionRequestDto;
+import com.sise.hotel_backend.tipoHabitacion.application.dto.request.InsertarTipoHabitacionRequestDto;
+import com.sise.hotel_backend.tipoHabitacion.application.dto.response.ActualizarTipoHabitacionResponseDto;
+import com.sise.hotel_backend.tipoHabitacion.application.dto.response.EliminarTipoHabitacionResponseDto;
+import com.sise.hotel_backend.tipoHabitacion.application.dto.response.InsertarTipoHabitacionResponseDto;
+import com.sise.hotel_backend.tipoHabitacion.application.dto.response.ListarTipoHabitacionResponseDto;
+import com.sise.hotel_backend.tipoHabitacion.application.dto.response.ObtenerTipoHabitacionResponseDto;
 import com.sise.hotel_backend.tipoHabitacion.application.service.TipoHabitacionApplicationService;
-import com.sise.hotel_backend.tipoHabitacion.domain.entities.TipoHabitacion;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tiposHabitacion")
@@ -28,42 +33,59 @@ public class TipoHabitacionController {
     private TipoHabitacionApplicationService tipoHabitacionApplicationService;
 
     @PostMapping("")
-    public ResponseEntity<TipoHabitacionResponseDto> insertarTipoHabitacion(
-        @RequestBody TipoHabitacionRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto> insertarTipoHabitacion(
+        @Valid @RequestBody InsertarTipoHabitacionRequestDto requestDto) {
             try {
-                TipoHabitacionResponseDto responseDto = tipoHabitacionApplicationService.insertarTipoHabitacion(requestDto);
-                return ResponseEntity.ok(responseDto);
+                InsertarTipoHabitacionResponseDto responseDto = 
+                tipoHabitacionApplicationService.insertarTipoHabitacion(requestDto);
+                return ResponseEntity.ok(BaseResponseDto.success(responseDto));
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
             }
         }
 
     @GetMapping("")
-    public ResponseEntity<List<TipoHabitacion>> listarTipoHabitacion(){
-        return ResponseEntity.ok(tipoHabitacionApplicationService.listarTipoHabitacion());
+    public ResponseEntity<BaseResponseDto> listarTipoHabitacion(){
+        try {
+            List<ListarTipoHabitacionResponseDto> responseDto =
+            tipoHabitacionApplicationService.listarTipoHabitacion();
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TipoHabitacion> obtenerTipoHabitacion(@PathVariable Integer id) {
-        Optional<TipoHabitacion> tipoHabitacion = tipoHabitacionApplicationService.obtenerTipoHabitacionPorId(id);
-        return tipoHabitacion.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BaseResponseDto> obtenerTipoHabitacion(@PathVariable Integer id) {
+        try {
+            ObtenerTipoHabitacionResponseDto responseDto =
+            tipoHabitacionApplicationService.obtenerTipoHabitacionPorId(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoHabitacion> actualizarTipoHabitacion(@PathVariable Integer id, @RequestBody TipoHabitacion tipoHabitacion) {
-        tipoHabitacion.setIdTipoHabitacion(id);
-        TipoHabitacion updated = tipoHabitacionApplicationService.actualizarTipoHabitacion(tipoHabitacion);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
+    public ResponseEntity<BaseResponseDto> actualizarTipoHabitacion(@PathVariable Integer id, 
+    @Valid @RequestBody ActualizarTipoHabitacionRequestDto requestDto) {
+        try {
+            ActualizarTipoHabitacionResponseDto responseDto = 
+            tipoHabitacionApplicationService.actualizarTipoHabitacion(id, requestDto);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> eliminarTipoHabitacon(@PathVariable Integer id) {
-        if (tipoHabitacionApplicationService.eliminarTipoHabitacion(id)) {
-            return ResponseEntity.ok("Tipo de Habitacion eliminado correctamente");
+    public ResponseEntity<BaseResponseDto> eliminarTipoHabitacon(@PathVariable Integer id) {
+        try {
+            EliminarTipoHabitacionResponseDto responseDto = 
+            tipoHabitacionApplicationService.eliminarTipoHabitacion(id);
+            return ResponseEntity.ok(BaseResponseDto.success(responseDto));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El id no existe");
     }
 }

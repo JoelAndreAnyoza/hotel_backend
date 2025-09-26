@@ -28,18 +28,19 @@ public class TipoHabitacionDomainService {
         return tipoHabitacionRepository.findAll();
     }
 
-    public TipoHabitacion actualizarTipoHabitacion(TipoHabitacion tipoHabitacion) {
-        if (tipoHabitacionRepository.existsById(tipoHabitacion.getIdTipoHabitacion())) {
+    public TipoHabitacion actualizarTipoHabitacion(Integer id, TipoHabitacion tipoHabitacion) {
+        if (tipoHabitacionRepository.existsById(id)) {
+            tipoHabitacion.setIdTipoHabitacion(id);
             return tipoHabitacionRepository.saveAndFlush(tipoHabitacion);
         }
         return null;
     }
 
-    public boolean eliminarTipoHabitacion(Integer id) {
+    public void eliminarTipoHabitacion(Integer id) {
         if (tipoHabitacionRepository.existsById(id)) {
             tipoHabitacionRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Tipo de Habitacion no encontrado");
         }
-        return false;
     }
 }
