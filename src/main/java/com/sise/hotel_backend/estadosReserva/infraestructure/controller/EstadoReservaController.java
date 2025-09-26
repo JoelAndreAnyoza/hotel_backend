@@ -23,15 +23,20 @@ import com.sise.hotel_backend.estadosReserva.application.dto.response.ListarEsta
 import com.sise.hotel_backend.estadosReserva.application.dto.response.ObtenerEstadoReservaResponseDto;
 import com.sise.hotel_backend.estadosReserva.application.service.EstadoReservaApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/estadosReserva")
+@Tag(name = "Estados de Reserva", description = "Operaciones relacionadas con la gestión de estados de reserva")
 public class EstadoReservaController {
     @Autowired
     private EstadoReservaApplicationService estadoReservaApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear un nuevo estado de reserva", 
+                description = "Permite insertar un nuevo estado de reserva en el sistema")
     public ResponseEntity<BaseResponseDto> insertarEstadoReserva(
         @Valid @RequestBody InsertarEstadoReservaRequestDto requestDto) {
         try {
@@ -44,6 +49,8 @@ public class EstadoReservaController {
     }
 
     @GetMapping("")
+    @Operation(summary = "Listar todos los estados de reserva", 
+                description = "Obtiene una lista con todos los estados de reserva registrados")
     public ResponseEntity<BaseResponseDto> listarEstadosReserva() {
         try {
             List<ListarEstadoReservaResponseDto> responseDto =
@@ -55,6 +62,8 @@ public class EstadoReservaController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener estado de reserva por ID", 
+                description = "Devuelve la información de un estado de reserva específico según su ID")
     public ResponseEntity<BaseResponseDto> obtenerEstadoReservaPorId(@PathVariable Integer id) {
         try {
             ObtenerEstadoReservaResponseDto responseDto =
@@ -66,6 +75,8 @@ public class EstadoReservaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un estado reserva", 
+                description = "Actualiza la información de un estado de reserva existente")
     public ResponseEntity<BaseResponseDto> actualizarEstadoReserva(@PathVariable Integer id, 
     @Valid @RequestBody ActualizarEstadoReservaRequestDto requestDto) {
         try {
@@ -78,6 +89,8 @@ public class EstadoReservaController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un estado de reserva", 
+                description = "Elimina un estado de reserva del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarEstadoReserva(@PathVariable Integer id) {
         try {
             EliminarEstadoReservaResponseDto responseDto = 

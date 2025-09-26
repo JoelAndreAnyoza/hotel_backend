@@ -23,15 +23,20 @@ import com.sise.hotel_backend.habitacion.application.dto.response.ListarHabitaci
 import com.sise.hotel_backend.habitacion.application.dto.response.ObtenerHabitacionResponseDto;
 import com.sise.hotel_backend.habitacion.application.service.HabitacionApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/habitaciones")
+@Tag(name = "Habitaciones", description = "Operaciones relacionadas con la gestión de habitaciones")
 public class HabitacionController {
     @Autowired
     private HabitacionApplicationService habitacionApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear una nueva habitacion", 
+                description = "Permite insertar una nueva habitacion en el sistema")
     public ResponseEntity<BaseResponseDto> insertarHabitacion(
         @Valid @RequestBody InsertarHabitacionRequestDto requestDto) {
         try {
@@ -44,6 +49,8 @@ public class HabitacionController {
     }
 
     @GetMapping("")
+    @Operation(summary = "Listar todas las habitaciones", 
+                description = "Obtiene una lista con todas las habitaciones registradas")
     public ResponseEntity<BaseResponseDto> listarHabitaciones() {
         try {
             List<ListarHabitacionResponseDto> responseDto =
@@ -55,6 +62,8 @@ public class HabitacionController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener habitacion por ID", 
+                description = "Devuelve la información de una habitacion específica según su ID")
     public ResponseEntity<BaseResponseDto> obtenerHabitacionPorId(@PathVariable Integer id) {
         try {
             ObtenerHabitacionResponseDto responseDto = 
@@ -66,6 +75,8 @@ public class HabitacionController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar una habitacion", 
+                description = "Actualiza la información de una habitacion existente")
     public ResponseEntity<BaseResponseDto> actualizarHabitacion(@PathVariable Integer id, 
     @Valid @RequestBody ActualizarHabitacionRequestDto requestDto) {
         try {
@@ -78,6 +89,8 @@ public class HabitacionController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar una habitacion", 
+                description = "Elimina una habitacion del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarHabitacion(@PathVariable Integer id) {
         try {
             EliminarHabitacionResponseDto responseDto = 

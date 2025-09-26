@@ -23,16 +23,21 @@ import com.sise.hotel_backend.tipoDocumento.application.dto.response.ListarTipoD
 import com.sise.hotel_backend.tipoDocumento.application.dto.response.ObtenerTipoDocumentoResponseDto;
 import com.sise.hotel_backend.tipoDocumento.application.service.TipoDocumentoApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tiposDocumento")
+@Tag(name = "Tipos de Documento", description = "Operaciones relacionadas con la gestión de tipos de documento")
 public class TipoDocumentoController {
 
     @Autowired
     private TipoDocumentoApplicationService tipoDocumentoApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear un nuevo tipo de documento", 
+                description = "Permite insertar un nuevo tipo de documento en el sistema")
     public ResponseEntity<BaseResponseDto> insertarTipoDocumento(
         @Valid @RequestBody InsertarTipoDocumentoRequestDto requestDto) {
             try {
@@ -45,6 +50,8 @@ public class TipoDocumentoController {
         }
 
     @GetMapping("")
+    @Operation(summary = "Listar todos los tipos de documento", 
+                description = "Obtiene una lista con todos los tipos de documento registrados")
     public ResponseEntity<BaseResponseDto> listarTipoDocumento() {
         try {
             List<ListarTipoDocumentoResponseDto> responseDto =
@@ -56,6 +63,8 @@ public class TipoDocumentoController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener tipo de documento por ID", 
+                description = "Devuelve la información de un tipo de documento específico según su ID")
     public ResponseEntity<BaseResponseDto> obtenerTipoDocumentoPorId(@PathVariable Integer id) {
         try {
             ObtenerTipoDocumentoResponseDto responseDto =
@@ -67,6 +76,8 @@ public class TipoDocumentoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un tipo de documento", 
+                description = "Actualiza la información de un tipo de documento existente")
     public ResponseEntity<BaseResponseDto> actualizarTipoDocumento(@PathVariable Integer id, 
     @Valid @RequestBody ActualizarTipoDocumentoRequestDto requestDto) {
         try {
@@ -79,6 +90,8 @@ public class TipoDocumentoController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un tipo de documento", 
+                description = "Elimina un tipo de documento del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarTipoDocumento(@PathVariable Integer id) {
         try {
             EliminarTipoDocumentoResponseDto responseDto = 

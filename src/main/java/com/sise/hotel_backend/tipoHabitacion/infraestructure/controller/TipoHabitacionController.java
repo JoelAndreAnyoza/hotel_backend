@@ -23,16 +23,22 @@ import com.sise.hotel_backend.tipoHabitacion.application.dto.response.ListarTipo
 import com.sise.hotel_backend.tipoHabitacion.application.dto.response.ObtenerTipoHabitacionResponseDto;
 import com.sise.hotel_backend.tipoHabitacion.application.service.TipoHabitacionApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tiposHabitacion")
+@Tag(name = "Tipos de Habitacion", 
+    description = "Operaciones relacionadas con la gestión de tipos de habitacion")
 public class TipoHabitacionController {
     
     @Autowired
     private TipoHabitacionApplicationService tipoHabitacionApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear un nuevo tipo de habitacion", 
+                description = "Permite insertar un nuevo tipo de habitacion en el sistema")
     public ResponseEntity<BaseResponseDto> insertarTipoHabitacion(
         @Valid @RequestBody InsertarTipoHabitacionRequestDto requestDto) {
             try {
@@ -45,6 +51,8 @@ public class TipoHabitacionController {
         }
 
     @GetMapping("")
+    @Operation(summary = "Listar todos los tipos de habitacion", 
+                description = "Obtiene una lista con todos los tipos de habitacion registrados")
     public ResponseEntity<BaseResponseDto> listarTipoHabitacion(){
         try {
             List<ListarTipoHabitacionResponseDto> responseDto =
@@ -56,6 +64,8 @@ public class TipoHabitacionController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener tipo de habitacion por ID", 
+                description = "Devuelve la información de un tipo de habitacion específico según su ID")
     public ResponseEntity<BaseResponseDto> obtenerTipoHabitacion(@PathVariable Integer id) {
         try {
             ObtenerTipoHabitacionResponseDto responseDto =
@@ -67,6 +77,8 @@ public class TipoHabitacionController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un tipo de habitacion", 
+    description = "Actualiza la información de un tipo de habitacion existente")
     public ResponseEntity<BaseResponseDto> actualizarTipoHabitacion(@PathVariable Integer id, 
     @Valid @RequestBody ActualizarTipoHabitacionRequestDto requestDto) {
         try {
@@ -79,6 +91,8 @@ public class TipoHabitacionController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Eliminar un tipo de habitacion", 
+    description = "Elimina un tipo de habitacion del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarTipoHabitacon(@PathVariable Integer id) {
         try {
             EliminarTipoHabitacionResponseDto responseDto = 

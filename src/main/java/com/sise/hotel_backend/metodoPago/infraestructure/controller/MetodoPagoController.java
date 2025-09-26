@@ -20,6 +20,8 @@ import com.sise.hotel_backend.metodoPago.application.dto.response.ListarMetodoPa
 import com.sise.hotel_backend.metodoPago.application.dto.response.ObtenerMetodoPagoResponseDto;
 import com.sise.hotel_backend.metodoPago.application.service.MetodoPagoApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,12 +30,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/metodosPago")
+@Tag(name = "Metodos de Pago", description = "Operaciones relacionadas con la gestión de metodos de pago")
 public class MetodoPagoController {
 
     @Autowired
     private MetodoPagoApplicationService metodoPagoApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear un nuevo metodo de pago", 
+                description = "Permite insertar un nuevo metodo de pago en el sistema")
     public ResponseEntity<BaseResponseDto> insertarMetdoPago(
         @Valid @RequestBody InsertarMetodoPagoRequestDto requestDto) {
         try {
@@ -46,6 +51,8 @@ public class MetodoPagoController {
     }
 
     @GetMapping("")
+    @Operation(summary = "Listar todos los metodos de pago", 
+                description = "Obtiene una lista con todos los metodos de pago registrados")
     public ResponseEntity<BaseResponseDto> listarMetodosPago() {
         try {
             List<ListarMetodoPagoResponseDto> responseDto =
@@ -57,6 +64,8 @@ public class MetodoPagoController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener metodo de pago por ID", 
+                description = "Devuelve la información de un metodo de pago específico según su ID")
     public ResponseEntity<BaseResponseDto> obtenerMetodoPagoPorId(@PathVariable Integer id) {
         try {
             ObtenerMetodoPagoResponseDto responseDto =
@@ -68,6 +77,8 @@ public class MetodoPagoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un metodo de pago", 
+                description = "Actualiza la información de un metodo de pago existente")
     public ResponseEntity<BaseResponseDto> actualizarMetodoPago(@PathVariable Integer id,
         @Valid @RequestBody ActualizarMetodoPagoRequestDto requestDto) {
         try {
@@ -80,6 +91,8 @@ public class MetodoPagoController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un metodo de pago", 
+                description = "Elimina un metodo de pago del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarMetodoPago(@PathVariable Integer id) {
         try {
             EliminarMetodoPagoResponseDto responseDto = 

@@ -22,16 +22,22 @@ import com.sise.hotel_backend.estadosHabitacion.application.dto.response.Inserta
 import com.sise.hotel_backend.estadosHabitacion.application.dto.response.ListarEstadoHabitacionResponseDto;
 import com.sise.hotel_backend.estadosHabitacion.application.dto.response.ObtenerEstadoHabitacionResponseDto;
 import com.sise.hotel_backend.estadosHabitacion.application.service.EstadoHabitacionApplicationService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/estadosHabitacion")
+@Tag(name = "Estados de habitacion", description = "Operaciones relacionadas con la gestión de estados de habitacion")
 public class EstadoHabitacionController {
     
     @Autowired
     private EstadoHabitacionApplicationService estadoHabitacionApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear un nuevo estado de habitacion", 
+                description = "Permite insertar un nuevo estado de habitacion en el sistema")
     public ResponseEntity<BaseResponseDto> insertarEstadoHabitacion(
         @Valid @RequestBody InsertarEstadoHabitacionRequestDto requestDto) {
             try {
@@ -44,6 +50,8 @@ public class EstadoHabitacionController {
         }
 
     @GetMapping("")
+    @Operation(summary = "Listar todos los estados de habitacion", 
+                description = "Obtiene una lista con todos los estados de habitacion registrados")
     public ResponseEntity<BaseResponseDto> listarEstadoHabitacion() {
         try {
             List<ListarEstadoHabitacionResponseDto> responseDto = 
@@ -55,6 +63,8 @@ public class EstadoHabitacionController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener estado de habitacion por ID", 
+                description = "Devuelve la información de un estado de habitacion específico según su ID")
     public ResponseEntity<BaseResponseDto> obtenerEstadoHabitacion(@PathVariable Integer id) {
         try {
             ObtenerEstadoHabitacionResponseDto responseDto = 
@@ -66,6 +76,8 @@ public class EstadoHabitacionController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un estado de habitacion", 
+                description = "Actualiza la información de un estado de habitacion existente")
     public ResponseEntity<BaseResponseDto> actualizarEstadoHabitacion(@PathVariable Integer id,
         @Valid @RequestBody ActualizarEstadoHabitacionRequestDto requestDto) {
         try {
@@ -78,6 +90,8 @@ public class EstadoHabitacionController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un estado de habitacion", 
+                description = "Elimina un estado de habitacion del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarEstadoHabitacion(@PathVariable Integer id) {
         try {
             EliminarEstadoHabitacionResponseDto responseDto = 

@@ -23,16 +23,21 @@ import com.sise.hotel_backend.usuario.application.dto.response.ListarUsuarioResp
 import com.sise.hotel_backend.usuario.application.dto.response.ObtenerUsuarioResponseDto;
 import com.sise.hotel_backend.usuario.application.service.UsuarioApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
+@Tag(name = "Usuarios", description = "Operaciones relacionadas con la gestión de usuarios")
 public class UsuarioController {
 
     @Autowired
     private UsuarioApplicationService usuarioApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear un nuevo usuario", 
+                description = "Permite insertar un nuevo usuario en el sistema")
     public ResponseEntity<BaseResponseDto> insertarUsuario(
         @Valid @RequestBody InsertarUsuarioRequestDto requestDto) {
             try {
@@ -45,6 +50,8 @@ public class UsuarioController {
         }
     
     @GetMapping("")
+    @Operation(summary = "Listar todos los usuarios", 
+                description = "Obtiene una lista con todos los usuarios registrados")
     public ResponseEntity<BaseResponseDto> listarUsuarios(){
         try {
             List<ListarUsuarioResponseDto> responseDto =
@@ -56,6 +63,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener usuario por ID", 
+                description = "Devuelve la información de un usuario específico según su ID")
     public ResponseEntity<BaseResponseDto> obtenerUsuarioPorId(@PathVariable Integer id) {
         try {
             ObtenerUsuarioResponseDto responseDto =
@@ -67,6 +76,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un usuario", 
+                description = "Actualiza la información de un usuario existente")
     public ResponseEntity<BaseResponseDto> actualizarUsuario(@PathVariable Integer id, 
     @Valid @RequestBody ActualizarUsuarioRequestDto requestDto) {
         try {
@@ -79,6 +90,8 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un usuario", 
+                description = "Elimina un usuario del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarUsuario(@PathVariable Integer id) {
         try {
             EliminarUsuarioResponseDto responseDto = 

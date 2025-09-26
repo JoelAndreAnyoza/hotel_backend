@@ -26,13 +26,19 @@ import jakarta.validation.Valid;
 
 import com.sise.hotel_backend.servicio.application.service.ServicioApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/servicios")
+@Tag(name = "Servicios", description = "Operaciones relacionadas con la gestión de servicios")
 public class ServicioController {
     @Autowired
     private ServicioApplicationService servicioApplicationService;
 
     @PostMapping("")
+    @Operation(summary = "Crear un nuevo servicio", 
+                description = "Permite insertar un nuevo servicio al sistema")
     public ResponseEntity<BaseResponseDto> insertarServicio(
         @Valid @RequestBody InsertarServicioRequestDto requestDto) {
         try {
@@ -45,6 +51,8 @@ public class ServicioController {
     }
 
     @GetMapping("")
+    @Operation(summary = "Listar todos los servicios", 
+    description = "Obtiene una lista con todos los servicios registrados")
     public ResponseEntity<BaseResponseDto> listarServicios() {
         try {
             List<ListarServicioResponseDto> responseDto =
@@ -56,6 +64,8 @@ public class ServicioController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener servicio por ID", 
+                description = "Devuelve la información de un servicio específico según su ID")
     public ResponseEntity<BaseResponseDto> obtenerServicioPorId(@PathVariable Integer id) {
         try {
             ObtenerServicioResponseDto responseDto =
@@ -67,6 +77,8 @@ public class ServicioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un servicio", 
+                description = "Actualiza la información de un servicio existente")
     public ResponseEntity<BaseResponseDto> actualizarServicio(@PathVariable Integer id,
         @Valid @RequestBody ActualizarServicioRequestDto requestDto) {
         try {
@@ -79,6 +91,8 @@ public class ServicioController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un servicio", 
+    description = "Elimina un servicio del sistema según su ID")
     public ResponseEntity<BaseResponseDto> eliminarServicio(@PathVariable Integer id) {
         try {
             EliminarServicioResponseDto responseDto = 
