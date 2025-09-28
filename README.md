@@ -20,6 +20,7 @@ Permite administrar **habitaciones, reservas, clientes, empleados, pagos y servi
 - PostgreSQL
 - JPA
 - Postman
+- Swagger
 
 ---
 
@@ -35,6 +36,12 @@ El sistema tiene como finalidad **gestionar las operaciones principales de un ho
 - Pagos (registro, métodos de pago, historial).
 - Servicios extras (spa, lavandería, transporte) y su asociación a reservas.
 - Gestión de usuarios y empleados (roles básicos y autenticación).
+
+### Acceso a la documentación Swagger
+La documentación de la API se encuentra disponible a través de Swagger UI. Para habilitarla, se creó un archivo de configuración en la carpeta config llamado SwaggerConfig.
+1. Asegúrate de que la aplicación esté corriendo.
+2. Abrir un navegador web e ir a la ruta: http://localhost:8080/swagger-ui/index.html
+3. Allí se visualiza todos los endpoints disponibles y probar las solicitudes.
 
 ### Exclusiones (fuera del alcance)
 
