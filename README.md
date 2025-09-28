@@ -43,6 +43,8 @@ La documentación de la API se encuentra disponible a través de Swagger UI. Par
 2. Abrir un navegador web e ir a la ruta: http://localhost:8080/swagger-ui/index.html
 3. Allí se visualiza todos los endpoints disponibles y probar las solicitudes.
 
+(Enlace del video) https://www.youtube.com/watch?v=NyvebH-D0Js
+
 ### Exclusiones (fuera del alcance)
 
 - No incluye frontend web ni móvil (solo API backend).
