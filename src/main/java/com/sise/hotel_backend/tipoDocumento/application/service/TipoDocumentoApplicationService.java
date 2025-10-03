@@ -63,8 +63,8 @@ public class TipoDocumentoApplicationService {
         return actualizarTipoDocumentoMapper.entityToResponse(tipoDocumento);
     }
 
-    public EliminarTipoDocumentoResponseDto eliminarTipoDocumento(Integer id) {
-        tipoDocumentoDomainService.eliminarTipoDocumento(id);
+    public EliminarTipoDocumentoResponseDto darBajaTipoDocumento(Integer id) {
+        tipoDocumentoDomainService.darBajaTipoDocumento(id);
         return eliminarTipoDocumentoMapper.entityToResponse(true);
     }
 }

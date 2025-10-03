@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.tipoDocumento.domain.entities.TipoDocumento;
 import com.sise.hotel_backend.tipoDocumento.domain.repository.TipoDocumentoRepository;
 
@@ -25,7 +26,7 @@ public class TipoDocumentoDomainService {
     }
 
     public List<TipoDocumento> listarTipoDocumento(){
-        return tipoDocumentoRepository.findAll();
+        return tipoDocumentoRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public TipoDocumento actualizarTipoDocumento(Integer id, TipoDocumento tipoDocumento) {
@@ -36,9 +37,11 @@ public class TipoDocumentoDomainService {
         return null;
     }
 
-    public void eliminarTipoDocumento(Integer id) {
-        if (tipoDocumentoRepository.existsById(id)) {
-            tipoDocumentoRepository.deleteById(id);
+    public void darBajaTipoDocumento(Integer id) {
+        TipoDocumento tipoDocumento = tipoDocumentoRepository.findById(id).orElse(null);
+        if (tipoDocumento != null) {
+            tipoDocumento.setEstadoAuditoria(EstadoAuditoria.INACTIVO);
+            tipoDocumentoRepository.save(tipoDocumento);
         } else {
             throw new RuntimeException("Tipo de Documento no encontrado");
         }

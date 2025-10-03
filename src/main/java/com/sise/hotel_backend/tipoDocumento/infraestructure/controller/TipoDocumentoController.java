@@ -92,10 +92,10 @@ public class TipoDocumentoController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un tipo de documento", 
                 description = "Elimina un tipo de documento del sistema según su ID")
-    public ResponseEntity<BaseResponseDto> eliminarTipoDocumento(@PathVariable Integer id) {
+    public ResponseEntity<BaseResponseDto> darBajaTipoDocumento(@PathVariable Integer id) {
         try {
             EliminarTipoDocumentoResponseDto responseDto = 
-            tipoDocumentoApplicationService.eliminarTipoDocumento(id);
+            tipoDocumentoApplicationService.darBajaTipoDocumento(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
