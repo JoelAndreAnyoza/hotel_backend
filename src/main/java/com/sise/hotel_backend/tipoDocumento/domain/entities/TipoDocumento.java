@@ -26,7 +26,7 @@ public class TipoDocumento {
     @Column(name = "descripcion", nullable = true)
     private String descripcion;
 
-    @Column(name = "estado_auditoria", insertable = false)
+    @Column(name = "estado_auditoria", insertable = false, updatable = true)
     private String estadoAuditoria;
 
     @Column(name = "fecha_creacion", insertable = false, updatable = false)

@@ -17,6 +17,10 @@ public class TipoDocumentoDomainService {
     TipoDocumentoRepository tipoDocumentoRepository;
 
     public TipoDocumento insertarTipoDocumento(TipoDocumento tipoDocumento){
+        Optional<TipoDocumento> tipoDoc = tipoDocumentoRepository.findByNombre(tipoDocumento.getNombre());
+        if (tipoDoc.isPresent()) {
+            throw new RuntimeException("El nombre del tipo de documento ya existe");
+        }
         TipoDocumento newTipoDocumento = tipoDocumentoRepository.saveAndFlush(tipoDocumento);
         return tipoDocumentoRepository.findById(newTipoDocumento.getIdTipoDocumento()).orElse(null);
     }
@@ -30,11 +34,18 @@ public class TipoDocumentoDomainService {
     }
 
     public TipoDocumento actualizarTipoDocumento(Integer id, TipoDocumento tipoDocumento) {
-        if (tipoDocumentoRepository.existsById(id)) {
-            tipoDocumento.setIdTipoDocumento(id);
-            return tipoDocumentoRepository.saveAndFlush(tipoDocumento);
+        TipoDocumento existente = tipoDocumentoRepository.findById(id).orElseThrow(() -> 
+            new RuntimeException("Tipo de Documento no encontrado"));
+        Optional<TipoDocumento> duplicado = tipoDocumentoRepository.findByNombre(tipoDocumento.getNombre());
+
+        if (duplicado.isPresent() && !duplicado.get().getIdTipoDocumento().equals(id)) {
+            throw new RuntimeException("El nombre del tipo de documento ya existe");
         }
-        return null;
+        if (tipoDocumento.getEstadoAuditoria() == null) {
+            tipoDocumento.setEstadoAuditoria(existente.getEstadoAuditoria());
+        }
+        tipoDocumento.setIdTipoDocumento(id);
+        return tipoDocumentoRepository.saveAndFlush(tipoDocumento);
     }
 
     public void darBajaTipoDocumento(Integer id) {
