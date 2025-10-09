@@ -36,7 +36,11 @@ public class ServicioDomainService {
         return null;
     }
 
-    public void darBajaServicio(Integer idServicio){
-        servicioRepository.darBajaServicio(idServicio);
+    public void eliminarServicio(Integer id) {
+        if (servicioRepository.existsById(id)) {
+            servicioRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Servicio no encontrado");
+        }
     }
 }

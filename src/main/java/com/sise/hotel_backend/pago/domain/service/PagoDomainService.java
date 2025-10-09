@@ -36,7 +36,11 @@ public class PagoDomainService {
         return null;
     }
 
-    public void darBajaPago(Integer idPago){
-        pagoRepository.darBajaPago(idPago);
+    public void eliminarPago(Integer id) {
+        if (pagoRepository.existsById(id)) {
+            pagoRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Pago no encontrado");
+        }
     }
 }

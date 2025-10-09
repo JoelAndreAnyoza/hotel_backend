@@ -63,8 +63,9 @@ public class TipoHabitacionApplicationService {
         return actualizarTipoHabitacionMapper.entityToResponse(tipoHabitacion);
     }
 
-    public EliminarTipoHabitacionResponseDto darBajaTipoHabitacion(Integer id) {
-        tipoHabitacionDomainService.darBajaTipoHabitacion(id);
+    public EliminarTipoHabitacionResponseDto eliminarTipoHabitacion(Integer id) {
+        tipoHabitacionDomainService.eliminarTipoHabitacion(id);
         return eliminarTipoHabitacionMapper.entityToResponse(true);
     }
+    
 }

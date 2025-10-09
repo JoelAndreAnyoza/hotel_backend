@@ -68,8 +68,8 @@ public class HabitacionComodidadApplicationService {
         return actualizarHabitacionComodidadMapper.entityToResponse(habitacionComodidad);
     }
 
-    public EliminarHabitacionComodidadResponseDto darBajaHabitacionComodidad(Integer id) {
-        habitacionComodidadDomainService.darBajaHabitacionComodidad(id);
+    public EliminarHabitacionComodidadResponseDto eliminarHabitacionComodidad(Integer id) {
+        habitacionComodidadDomainService.eliminarHabitacionComodidad(id);
         return eliminarHabitacionComodidadMapper.entityToResponse(true);
     }
 }

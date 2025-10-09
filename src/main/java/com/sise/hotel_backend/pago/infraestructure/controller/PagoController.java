@@ -92,10 +92,10 @@ public class PagoController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un pago", 
                 description = "Elimina un pago del sistema según su ID")
-    public ResponseEntity<BaseResponseDto> darBajaPago(@PathVariable Integer id) {
+    public ResponseEntity<BaseResponseDto> eliminarPago(@PathVariable Integer id) {
         try {
             EliminarPagoResponseDto responseDto = 
-                    pagoApplicationService.darBajaPago(id);
+                    pagoApplicationService.eliminarPago(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

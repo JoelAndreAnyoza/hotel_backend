@@ -62,8 +62,8 @@ public class ReservaApplicationService {
         return actualizarReservaMapper.entityToResponse(reserva);
     }
 
-    public EliminarReservaResponseDto darBajaReserva(Integer id) {
-        reservaDomainService.darBajaReserva(id);
+    public EliminarReservaResponseDto eliminarReserva(Integer id) {
+        reservaDomainService.eliminarReserva(id);
         return eliminarReservaMapper.entityToResponse(true);    
     }
 }

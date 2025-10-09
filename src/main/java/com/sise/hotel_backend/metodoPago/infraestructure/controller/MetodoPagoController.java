@@ -96,7 +96,7 @@ public class MetodoPagoController {
     public ResponseEntity<BaseResponseDto> eliminarMetodoPago(@PathVariable Integer id) {
         try {
             EliminarMetodoPagoResponseDto responseDto = 
-            metodoPagoApplicationService.darBajaMetodoPago(id);
+            metodoPagoApplicationService.eliminarMetodoPago(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

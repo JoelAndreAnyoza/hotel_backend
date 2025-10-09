@@ -38,7 +38,11 @@ public class HabitacionComodidadDomainService {
         return null;
     }
     
-    public void darBajaHabitacionComodidad(Integer idHabitacionComodidad){
-        habitacionComodidadRepository.darBajaHabitacionComodidad(idHabitacionComodidad);
+    public void eliminarHabitacionComodidad(Integer id) {
+        if (habitacionComodidadRepository.existsById(id)) {
+            habitacionComodidadRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("HabitacionComodidad no encontrado");
+        }
     }
 }

@@ -92,10 +92,10 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un usuario", 
                 description = "Elimina un usuario del sistema según su ID")
-    public ResponseEntity<BaseResponseDto> darBajaUsuario(@PathVariable Integer id) {
+    public ResponseEntity<BaseResponseDto> eliminarUsuario(@PathVariable Integer id) {
         try {
             EliminarUsuarioResponseDto responseDto = 
-            usuarioApplicationService.darBajaUsuario(id);
+            usuarioApplicationService.eliminarUsuario(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

@@ -65,8 +65,8 @@ public class HabitacionApplicationService {
         return actualizarHabitacionMapper.entityToResponse(habitacion);
     }
 
-    public EliminarHabitacionResponseDto darBajaHabitacion(Integer id) {
-        habitacionDomainService.darBajaHabitacion(id);
+    public EliminarHabitacionResponseDto eliminarHabitacion(Integer id) {
+        habitacionDomainService.eliminarHabitacion(id);
         return eliminarHabitacionMapper.entityToResponse(true);    
     }
 }

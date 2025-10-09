@@ -93,10 +93,10 @@ public class ServicioController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un servicio", 
     description = "Elimina un servicio del sistema según su ID")
-    public ResponseEntity<BaseResponseDto> darBajaServicio(@PathVariable Integer id) {
+    public ResponseEntity<BaseResponseDto> eliminarServicio(@PathVariable Integer id) {
         try {
             EliminarServicioResponseDto responseDto = 
-            servicioApplicationService.darBajaServicio(id);
+            servicioApplicationService.eliminarServicio(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

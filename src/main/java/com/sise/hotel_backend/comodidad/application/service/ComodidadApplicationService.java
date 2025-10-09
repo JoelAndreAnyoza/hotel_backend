@@ -65,8 +65,8 @@ public class ComodidadApplicationService {
         return actualizarComodidadMapper.entityToResponse(comodidad);
     }
 
-    public EliminarComodidadResponseDto darBajaComodidad(Integer id) {
-        comodidadDomainService.darBajaComodidad(id);
+    public EliminarComodidadResponseDto eliminarComodidad(Integer id) {
+        comodidadDomainService.eliminarComodidad(id);
         return eliminarComodidadMapper.entityToResponse(true);
     }
 }
