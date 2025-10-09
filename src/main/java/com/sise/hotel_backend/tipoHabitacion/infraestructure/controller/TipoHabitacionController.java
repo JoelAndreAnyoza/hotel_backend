@@ -96,7 +96,7 @@ public class TipoHabitacionController {
     public ResponseEntity<BaseResponseDto> eliminarTipoHabitacon(@PathVariable Integer id) {
         try {
             EliminarTipoHabitacionResponseDto responseDto = 
-            tipoHabitacionApplicationService.eliminarTipoHabitacion(id);
+            tipoHabitacionApplicationService.darBajaTipoHabitacion(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

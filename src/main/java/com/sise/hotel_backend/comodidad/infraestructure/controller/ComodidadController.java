@@ -95,7 +95,7 @@ public class ComodidadController {
     public ResponseEntity<BaseResponseDto> eliminarComodidad(@PathVariable Integer id) {
         try {
             EliminarComodidadResponseDto responseDto = 
-            comodidadApplicationService.eliminarComodidad(id);
+            comodidadApplicationService.darBajaComodidad(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));  
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

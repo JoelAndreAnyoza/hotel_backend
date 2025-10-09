@@ -96,7 +96,7 @@ public class ServicioController {
     public ResponseEntity<BaseResponseDto> eliminarServicio(@PathVariable Integer id) {
         try {
             EliminarServicioResponseDto responseDto = 
-            servicioApplicationService.eliminarServicio(id);
+            servicioApplicationService.darBajaServicio(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

@@ -95,7 +95,7 @@ public class PagoController {
     public ResponseEntity<BaseResponseDto> eliminarPago(@PathVariable Integer id) {
         try {
             EliminarPagoResponseDto responseDto = 
-                    pagoApplicationService.eliminarPago(id);
+                    pagoApplicationService.darBajaPago(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

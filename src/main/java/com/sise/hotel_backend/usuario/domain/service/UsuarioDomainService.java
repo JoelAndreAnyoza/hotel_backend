@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.usuario.domain.entities.Usuario;
 import com.sise.hotel_backend.usuario.domain.repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioDomainService {
@@ -38,7 +41,7 @@ public class UsuarioDomainService {
     }
 
     public List<Usuario> listarUsuario(){
-        return usuarioRepository.findAll();
+        return usuarioRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Usuario actualizarUsuario(Integer id,Usuario usuario){
@@ -58,11 +61,11 @@ public class UsuarioDomainService {
         return usuarioRepository.saveAndFlush(usuario);
     }
 
-    public void eliminarUsuario(Integer id) {
-        if (usuarioRepository.existsById(id)) {
-            usuarioRepository.deleteById(id);
-        } else {
+    @Transactional
+    public void darBajaUsuario(Integer idUsuario) {
+        if (!usuarioRepository.existsById(idUsuario)) {
             throw new RuntimeException("Usuario no encontrado");
         }
+        usuarioRepository.darBajaUsuario(idUsuario);
     }
 }

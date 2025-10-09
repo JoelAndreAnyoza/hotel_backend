@@ -95,7 +95,7 @@ public class EstadoHabitacionController {
     public ResponseEntity<BaseResponseDto> eliminarEstadoHabitacion(@PathVariable Integer id) {
         try {
             EliminarEstadoHabitacionResponseDto responseDto = 
-                estadoHabitacionApplicationService.eliminarEstadoHabitacion(id);
+                estadoHabitacionApplicationService.darBajaEstadoHabitacion(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

@@ -5,8 +5,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.habitacionComodidad.domain.entities.HabitacionComodidad;
 import com.sise.hotel_backend.habitacionComodidad.domain.repository.HabitacionComodidadRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class HabitacionComodidadDomainService {
@@ -22,7 +26,7 @@ public class HabitacionComodidadDomainService {
     }
 
     public List<HabitacionComodidad> listarHabitacionComodidades() {
-        return habitacionComodidadRepository.findAll();
+        return habitacionComodidadRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Optional<HabitacionComodidad> obtenerHabitacionComodidad(Integer id) {
@@ -38,11 +42,11 @@ public class HabitacionComodidadDomainService {
         return null;
     }
     
-    public void eliminarHabitacionComodidad(Integer id) {
-        if (habitacionComodidadRepository.existsById(id)) {
-            habitacionComodidadRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("HabitacionComodidad no encontrado");
+    @Transactional
+    public void darBajaHabitacionComodidad(Integer idHabitacionComodidad) {
+        if (!habitacionComodidadRepository.existsById(idHabitacionComodidad)) {
+            throw new RuntimeException("Habitación Comodidad no encontrado");
         }
+        habitacionComodidadRepository.darBajaHabitacionComodidad(idHabitacionComodidad);
     }
 }

@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.habitacion.domain.entities.Habitacion;
 import com.sise.hotel_backend.habitacion.domain.repository.HabitacionRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class HabitacionDomainService {
@@ -24,7 +27,7 @@ public class HabitacionDomainService {
     }
 
     public List<Habitacion> listarHabitaciones() {
-        return habitacionRepository.findAll();
+        return habitacionRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Habitacion actualizarHabitacion(Integer id, Habitacion habitacion) {
@@ -35,11 +38,8 @@ public class HabitacionDomainService {
         return null;
     }
 
-    public void eliminarHabitacion(Integer id) {
-        if (habitacionRepository.existsById(id)) {
-            habitacionRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Habitacion no encontrado");
-        }
+    @Transactional
+    public void darBajaHabitacion(Integer idHabitacion) {
+        habitacionRepository.darBajaHabitacion(idHabitacion);
     }
 }

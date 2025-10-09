@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.metodoPago.domain.entities.MetodoPago;
 import com.sise.hotel_backend.metodoPago.domain.repository.MetodoPagoRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class MetodoPagoDomainService {
@@ -21,7 +24,7 @@ public class MetodoPagoDomainService {
     }
 
     public List<MetodoPago> listarMetodosPago() {
-        return metodoPagoRepository.findAll();
+        return metodoPagoRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Optional<MetodoPago> obtenerMetodoPago(Integer id) {
@@ -36,11 +39,8 @@ public class MetodoPagoDomainService {
         return null;
     }
 
-    public void eliminarMetodoPago(Integer id) {
-        if (metodoPagoRepository.existsById(id)) {
-            metodoPagoRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Metodo de Pago no encontrado");
-        }
+    @Transactional
+    public void darBajaMetodoPago(Integer idMetodoPago) {
+        metodoPagoRepository.darBajaMetodoPago(idMetodoPago);
     }
 }

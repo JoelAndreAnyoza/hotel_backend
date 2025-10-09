@@ -26,7 +26,7 @@ public class Servicio {
     @Column(name = "descripcion", nullable = true)
     private String descripcion;
 
-    @Column(name = "precio", nullable = true)
+    @Column(name = "precio")
     private Double precio;
 
     @Column(name = "estado_auditoria", insertable = false, updatable = false)

@@ -97,7 +97,7 @@ public class HabitacionComodidadController {
     public ResponseEntity<BaseResponseDto> eliminarHabitacionComodidad(@PathVariable Integer id) {
         try {
             EliminarHabitacionComodidadResponseDto responseDto =
-            habitacionComodidadApplicationService.eliminarHabitacionComodidad(id);
+            habitacionComodidadApplicationService.darBajaHabitacionComodidad(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

@@ -96,7 +96,7 @@ public class ReservaServicioController {
     public ResponseEntity<BaseResponseDto> eliminarReservaServicio(@PathVariable Integer id) {
         try {
             EliminarReservaServicioResponseDto responseDto = 
-                    reservaServicioApplicationService.eliminarReservaServicio(id);
+                    reservaServicioApplicationService.darBajaReservaServicio(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

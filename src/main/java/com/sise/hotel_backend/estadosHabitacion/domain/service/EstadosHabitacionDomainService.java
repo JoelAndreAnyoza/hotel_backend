@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.estadosHabitacion.domain.entities.EstadosHabitacion;
 import com.sise.hotel_backend.estadosHabitacion.domain.repository.EstadosHabitacionRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EstadosHabitacionDomainService {
@@ -21,7 +24,7 @@ public class EstadosHabitacionDomainService {
     }
 
     public List<EstadosHabitacion> listarEstadoHabitacion(){
-        return estadosHabitacionRepository.findAll();
+        return estadosHabitacionRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Optional<EstadosHabitacion> obtenerEstadoHabitacion(Integer id){
@@ -36,11 +39,8 @@ public class EstadosHabitacionDomainService {
         return null;
     }
 
-    public void eliminarEstadoHabitacion(Integer id) {
-        if (estadosHabitacionRepository.existsById(id)) {
-            estadosHabitacionRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Estado de habitación no encontrado");
-        }
+    @Transactional
+    public void darBajaEstadoHabitacion(Integer idEstadoHabitacion) {
+        estadosHabitacionRepository.darBajaEstadoHabitacion(idEstadoHabitacion);
     }
 }

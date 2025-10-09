@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.estadosReserva.domain.entities.EstadoReserva;
 import com.sise.hotel_backend.estadosReserva.domain.repository.EstadoReservaRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EstadoReservaDomainService {
@@ -25,7 +28,7 @@ public class EstadoReservaDomainService {
     }
 
     public List<EstadoReserva> listarEstadoReservas() {
-        return estadoReservaRepository.findAll();
+        return estadoReservaRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public EstadoReserva actualizarEstadoReserva(Integer id, EstadoReserva estadoReserva) {
@@ -36,11 +39,8 @@ public class EstadoReservaDomainService {
         return null;
     }
 
-    public void eliminarEstadoReserva(Integer id) {
-        if (estadoReservaRepository.existsById(id)) {
-            estadoReservaRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Estado de Reserva no encontrado");
-        }
+    @Transactional
+    public void darBajaEstadoReserva(Integer idEstadoReserva) {
+        estadoReservaRepository.darBajaEstadoReserva(idEstadoReserva);
     }
 }

@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.servicio.domain.entities.Servicio;
 import com.sise.hotel_backend.servicio.domain.repository.ServicioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ServicioDomainService {
@@ -21,10 +24,13 @@ public class ServicioDomainService {
     }
 
     public List<Servicio> listarServicios() {
-        return servicioRepository.findAll();
+        return servicioRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Optional<Servicio> obtenerServicio(Integer id) {
+        if (!servicioRepository.existsById(id)) {
+            throw new RuntimeException("Servicio no encontrado");
+        }
         return servicioRepository.findById(id);
     }
 
@@ -33,14 +39,14 @@ public class ServicioDomainService {
             servicio.setIdServicio(id);
             return servicioRepository.saveAndFlush(servicio);
         }
-        return null;
+        throw new RuntimeException("Servicio no encontrado");
     }
 
-    public void eliminarServicio(Integer id) {
-        if (servicioRepository.existsById(id)) {
-            servicioRepository.deleteById(id);
-        } else {
+    @Transactional
+    public void darBajaServicio(Integer idServicio) {
+        if (!servicioRepository.existsById(idServicio)) {
             throw new RuntimeException("Servicio no encontrado");
         }
+        servicioRepository.darBajaServicio(idServicio);
     }
 }

@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.reservaServicio.domain.entities.ReservaServicio;
 import com.sise.hotel_backend.reservaServicio.domain.repository.ReservaServicioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReservaServicioDomainService {
@@ -22,10 +25,13 @@ public class ReservaServicioDomainService {
     }
 
     public List<ReservaServicio> listarReservaServicios() {
-        return reservaServicioRepository.findAll();
+        return reservaServicioRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Optional<ReservaServicio> obtenerReservaServicio(Integer id) {
+        if (!reservaServicioRepository.existsById(id)) {
+            throw new RuntimeException("Reserva de Servicio no encontrado");
+        }
         return reservaServicioRepository.findById(id);
     }
 
@@ -34,14 +40,14 @@ public class ReservaServicioDomainService {
             reservaServicio.setIdReservaServicio(id);
             return reservaServicioRepository.saveAndFlush(reservaServicio);
         }
-        return null;
+        throw new RuntimeException("Reserva de Servicio no encontrado");
     }
 
-    public void eliminarReservaServicio(Integer id) {
-        if (reservaServicioRepository.existsById(id)) {
-            reservaServicioRepository.deleteById(id);
-        } else {
+    @Transactional
+    public void darBajaReservaServicio(Integer idReservaServicio) {
+        if (!reservaServicioRepository.existsById(idReservaServicio)) {
             throw new RuntimeException("Reserva de Servicio no encontrado");
         }
+        reservaServicioRepository.darBajaReservaServicio(idReservaServicio);
     }
 }

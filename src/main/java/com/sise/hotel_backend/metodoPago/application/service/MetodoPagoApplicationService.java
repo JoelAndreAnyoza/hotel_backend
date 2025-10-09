@@ -63,8 +63,8 @@ public class MetodoPagoApplicationService {
         return actualizarMetodoPagoMapper.entityToResponse(metodoPago);
     }
 
-    public EliminarMetodoPagoResponseDto eliminarMetodoPago(Integer id) {
-        metodoPagoDomainService.eliminarMetodoPago(id);
-        return eliminarMetodoPagoMapper.entityToResponse(true);    
+    public EliminarMetodoPagoResponseDto darBajaMetodoPago(Integer id) {
+        metodoPagoDomainService.darBajaMetodoPago(id);
+        return eliminarMetodoPagoMapper.entityToResponse(true);
     }
 }

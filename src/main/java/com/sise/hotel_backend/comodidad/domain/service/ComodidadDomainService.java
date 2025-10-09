@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.comodidad.domain.entities.Comodidad;
 import com.sise.hotel_backend.comodidad.domain.repository.ComodidadRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ComodidadDomainService {
@@ -24,7 +27,7 @@ public class ComodidadDomainService {
     }
 
     public List<Comodidad> listarComodidades() {
-        return comodidadRepository.findAll();
+        return comodidadRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Comodidad actualizarComodidad(Integer id, Comodidad comodidad) {
@@ -35,11 +38,8 @@ public class ComodidadDomainService {
         return null;
     }
 
-    public void eliminarComodidad(Integer id) {
-        if (comodidadRepository.existsById(id)) {
-            comodidadRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Comodidad no encontrada");
-        }
+    @Transactional
+    public void darBajaComodidad(Integer idComodidad) {
+        comodidadRepository.darBajaComodidad(idComodidad);
     }
 }

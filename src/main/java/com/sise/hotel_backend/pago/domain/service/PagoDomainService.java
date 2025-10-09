@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sise.hotel_backend.common.domain.enums.EstadoAuditoria;
 import com.sise.hotel_backend.pago.domain.entities.Pago;
 import com.sise.hotel_backend.pago.domain.repository.PagoRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PagoDomainService {
@@ -21,7 +24,7 @@ public class PagoDomainService {
     }
 
     public List<Pago> listarPago() {
-        return pagoRepository.findAll();
+        return pagoRepository.findByEstadoAuditoria(EstadoAuditoria.ACTIVO);
     }
 
     public Optional<Pago> obtenerPago(Integer id) {
@@ -36,11 +39,8 @@ public class PagoDomainService {
         return null;
     }
 
-    public void eliminarPago(Integer id) {
-        if (pagoRepository.existsById(id)) {
-            pagoRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Pago no encontrado");
-        }
+    @Transactional
+    public void darBajaPago(Integer idPago) {
+        pagoRepository.darBajaPago(idPago);
     }
 }
