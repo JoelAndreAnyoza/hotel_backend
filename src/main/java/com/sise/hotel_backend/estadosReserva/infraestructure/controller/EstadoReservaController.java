@@ -91,10 +91,10 @@ public class EstadoReservaController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un estado de reserva", 
                 description = "Elimina un estado de reserva del sistema según su ID")
-    public ResponseEntity<BaseResponseDto> eliminarEstadoReserva(@PathVariable Integer id) {
+    public ResponseEntity<BaseResponseDto> darBajaEstadoReserva(@PathVariable Integer id) {
         try {
             EliminarEstadoReservaResponseDto responseDto = 
-            estadoReservaApplicationService.eliminarEstadoReserva(id);
+            estadoReservaApplicationService.darBajaEstadoReserva(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

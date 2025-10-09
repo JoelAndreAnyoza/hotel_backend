@@ -61,8 +61,8 @@ public class PagoApplicationService {
         return actualizarPagoMapper.entityToResponse(pago);
     }
 
-    public EliminarPagoResponseDto eliminarPago(Integer id) {
-        pagoDomainService.eliminarPago(id);
+    public EliminarPagoResponseDto darBajaPago(Integer id) {
+        pagoDomainService.darBajaPago(id);
         return eliminarPagoMapper.entityToResponse(true);    
     }
 }

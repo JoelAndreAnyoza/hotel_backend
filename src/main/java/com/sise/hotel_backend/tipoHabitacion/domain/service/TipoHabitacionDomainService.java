@@ -36,11 +36,7 @@ public class TipoHabitacionDomainService {
         return null;
     }
 
-    public void eliminarTipoHabitacion(Integer id) {
-        if (tipoHabitacionRepository.existsById(id)) {
-            tipoHabitacionRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Tipo de Habitacion no encontrado");
-        }
+    public void darBajaTipoHabitacion(Integer idTipoHabitacion){
+        tipoHabitacionRepository.darBajaTipoHabitacion(idTipoHabitacion);
     }
 }

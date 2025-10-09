@@ -36,11 +36,7 @@ public class EstadosHabitacionDomainService {
         return null;
     }
 
-    public void eliminarEstadoHabitacion(Integer id) {
-        if (estadosHabitacionRepository.existsById(id)) {
-            estadosHabitacionRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Estado de habitación no encontrado");
-        }
+    public void darBajaEstadoHabitacion(Integer idEstadoHabitacion){
+        estadosHabitacionRepository.darBajaEstadoHabitacion(idEstadoHabitacion);
     }
 }

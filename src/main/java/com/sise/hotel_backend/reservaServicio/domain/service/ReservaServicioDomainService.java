@@ -37,11 +37,7 @@ public class ReservaServicioDomainService {
         return null;
     }
 
-    public void eliminarReservaServicio(Integer id) {
-        if (reservaServicioRepository.existsById(id)) {
-            reservaServicioRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Reserva de Servicio no encontrado");
-        }
+    public void darBajaReservaServicio(Integer idReservaServicio){
+        reservaServicioRepository.darBajaReservaServicio(idReservaServicio);
     }
 }

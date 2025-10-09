@@ -42,4 +42,16 @@ public class ComodidadDomainService {
             throw new RuntimeException("Comodidad no encontrada");
         }
     }
+
+    public void darBajaComodidad(Integer idComodidad) {
+        // Comodidad comodidad = comodidadRepository.findById(id).orElse(null);
+        // if (comodidad != null) {
+        //     comodidad.setEstadoAuditoria(EstadoAuditoria.INACTIVO);
+        //     comodidadRepository.save(comodidad);
+        // } else {
+        //     throw new RuntimeException("Comodidad no encontrada");
+        // }
+
+        comodidadRepository.darBajaComodidad(idComodidad);
+    }
 }

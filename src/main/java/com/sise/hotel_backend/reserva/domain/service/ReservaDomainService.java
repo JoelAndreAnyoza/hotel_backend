@@ -36,11 +36,7 @@ public class ReservaDomainService {
         return null;
     }
 
-    public void eliminarReserva(Integer id) {
-        if (reservaRepository.existsById(id)) {
-            reservaRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Reserva no encontrada");
-        }
+    public void darBajaReserva(Integer idReserva){
+        reservaRepository.darBajaReserva(idReserva);
     }
 }

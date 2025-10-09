@@ -58,11 +58,7 @@ public class UsuarioDomainService {
         return usuarioRepository.saveAndFlush(usuario);
     }
 
-    public void eliminarUsuario(Integer id) {
-        if (usuarioRepository.existsById(id)) {
-            usuarioRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Usuario no encontrado");
-        }
+    public void darBajaUsuario(Integer idUsuario){
+        usuarioRepository.darBajaUsuario(idUsuario);
     }
 }

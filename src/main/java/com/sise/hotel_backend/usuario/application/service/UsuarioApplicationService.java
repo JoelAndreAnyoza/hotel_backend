@@ -63,8 +63,8 @@ public class UsuarioApplicationService{
         return actualizarUsuarioMapper.entityToResponse(usuario);
     }
 
-    public EliminarUsuarioResponseDto eliminarUsuario(Integer id) {
-        usuarioDomainService.eliminarUsuario(id);
+    public EliminarUsuarioResponseDto darBajaUsuario(Integer id) {
+        usuarioDomainService.darBajaUsuario(id);
         return eliminarUsuarioMapper.entityToResponse(true);
     }
 }

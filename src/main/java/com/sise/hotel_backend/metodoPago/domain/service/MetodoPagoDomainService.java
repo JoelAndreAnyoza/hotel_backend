@@ -36,11 +36,7 @@ public class MetodoPagoDomainService {
         return null;
     }
 
-    public void eliminarMetodoPago(Integer id) {
-        if (metodoPagoRepository.existsById(id)) {
-            metodoPagoRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Metodo de Pago no encontrado");
-        }
+    public void darBajaMetodoPago(Integer idMetodoPago){
+        metodoPagoRepository.darBajaMetodoPago(idMetodoPago);
     }
 }

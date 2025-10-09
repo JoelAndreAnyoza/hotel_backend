@@ -36,11 +36,7 @@ public class EstadoReservaDomainService {
         return null;
     }
 
-    public void eliminarEstadoReserva(Integer id) {
-        if (estadoReservaRepository.existsById(id)) {
-            estadoReservaRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Estado de Reserva no encontrado");
-        }
+    public void darBajaEstadoReserva(Integer idEstadoReserva) {
+        estadoReservaRepository.darBajaEstadoReserva(idEstadoReserva);
     }
 }

@@ -92,10 +92,10 @@ public class ReservaController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar una reserva", 
                 description = "Elimina una reserva del sistema según su ID")
-    public ResponseEntity<BaseResponseDto> eliminarReserva(@PathVariable Integer id) {
+    public ResponseEntity<BaseResponseDto> darBajaReserva(@PathVariable Integer id) {
         try {
             EliminarReservaResponseDto responseDto = 
-            reservaApplicationService.eliminarReserva(id);
+            reservaApplicationService.darBajaReserva(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));

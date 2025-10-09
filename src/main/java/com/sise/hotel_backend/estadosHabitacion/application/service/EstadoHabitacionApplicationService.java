@@ -67,8 +67,8 @@ public class EstadoHabitacionApplicationService {
         return actualizarEstadoHabitacionMapper.entityToResponse(estadosHabitacion);
     }
 
-    public EliminarEstadoHabitacionResponseDto eliminarEstadoHabitacion(Integer id) {
-        estadosHabitacionDomainService.eliminarEstadoHabitacion(id);
+    public EliminarEstadoHabitacionResponseDto darBajaEstadoHabitacion(Integer id) {
+        estadosHabitacionDomainService.darBajaEstadoHabitacion(id);
         return eliminarEstadoHabitacionMapper.entityToResponse(true);
     }
 }

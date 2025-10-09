@@ -63,9 +63,8 @@ public class ServicioApplicationService {
         return actualizarServicioMapper.entityToResponse(servicio);
     }
 
-    public EliminarServicioResponseDto eliminarServicio(Integer id) {
-        servicioDomainService.eliminarServicio(id);
+    public EliminarServicioResponseDto darBajaServicio(Integer idServicio){
+        servicioDomainService.darBajaServicio(idServicio);
         return eliminarServicioMapper.entityToResponse(true);
     }
-
 }

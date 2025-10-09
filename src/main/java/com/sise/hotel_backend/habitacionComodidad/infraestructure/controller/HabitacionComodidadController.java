@@ -94,10 +94,10 @@ public class HabitacionComodidadController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar relación habitación-comodidad", 
                 description = "Elimina la asociación entre una habitación y una comodidad")
-    public ResponseEntity<BaseResponseDto> eliminarHabitacionComodidad(@PathVariable Integer id) {
+    public ResponseEntity<BaseResponseDto> darBajaHabitacionComodidad(@PathVariable Integer id) {
         try {
             EliminarHabitacionComodidadResponseDto responseDto =
-            habitacionComodidadApplicationService.eliminarHabitacionComodidad(id);
+            habitacionComodidadApplicationService.darBajaHabitacionComodidad(id);
             return ResponseEntity.ok(BaseResponseDto.success(responseDto));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(BaseResponseDto.error(e.getMessage()));
